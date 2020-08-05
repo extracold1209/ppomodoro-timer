@@ -1,22 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import {useDispatch} from "react-redux";
-import {sayHelloAction} from '../../stores/common';
+import TimerCard from "../atoms/TimerCard";
 
 const CenterContainer = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 `;
 
-
 const MainContainer: React.FC = () => {
-    const dispatch = useDispatch();
 
     return (
         <CenterContainer>
             <div>Hello MainContainer</div>
-            <button onClick={() => dispatch(sayHelloAction)}>클릭</button>
+            <TimerCard />
         </CenterContainer>
     )
 }
