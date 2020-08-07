@@ -9,6 +9,10 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 120px;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 5px;
 `;
 
 const TimerNameSpan = styled.span`
@@ -30,6 +34,12 @@ const ControllerContainer = styled.div`
 
 const FlexButton = styled.button`
     display: flex;
+    border: none;
+    border-radius: 4px;
+    background-color: lightgrey;
+    cursor: pointer;
+    padding: 7px 14px;
+    margin: 0 6px;
 `;
 
 function convertSecondToDisplayText(seconds: number) {
