@@ -1,0 +1,29 @@
+import {useCallback, useEffect, useState} from 'react';
+
+export default (initialSecond: number): [() => void, () => void, number] => {
+    const [remainSeconds, changeSeconds] = useState(initialSecond);
+    const [isStarted, setToggle] = useState(false);
+    const start = useCallback(() => { setToggle(true); }, []);
+    const stop = useCallback(() => { setToggle(false); }, []);
+
+    useEffect(() => {
+        let timeout: number | undefined = undefined;
+
+        if (!isStarted) {
+            timeout && clearTimeout(timeout);
+            changeSeconds(initialSecond);
+        } else {
+            timeout = setTimeout(() => {
+                if (remainSeconds === 0) {
+                    clearTimeout(timeout);
+                } else {
+                    changeSeconds(remainSeconds - 1);
+                }
+            }, 1000);
+        }
+
+        return () => clearTimeout(timeout);
+    }, [isStarted, remainSeconds]);
+
+    return [start, stop, remainSeconds];
+};

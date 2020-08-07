@@ -22,7 +22,14 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": "error",
+        "@typescript-eslint/explicit-module-boundary-types": "off"
     },
-    "ignorePatterns": ["*.config.js"]
+    "ignorePatterns": [
+        "*.config.js"
+    ]
 }

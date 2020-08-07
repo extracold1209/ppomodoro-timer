@@ -1,5 +1,9 @@
 import React from 'react';
-import styled from "styled-components";
+import addSeconds from 'date-fns/addSeconds';
+import formatDate from 'date-fns/format';
+import styled from 'styled-components';
+import useTimer from '../../hooks/useTimer';
+
 
 const Container = styled.div`
     display: flex;
@@ -7,7 +11,14 @@ const Container = styled.div`
     align-items: center;
 `;
 
+const TimerNameSpan = styled.span`
+    font-size: 32px;
+    font-family: 'Cute Font', cursive;
+`;
+
 const IndicatorContainer = styled.div`
+    cursor: default;
+    user-select: none;
     font-family: 'Special Elite', cursive;
     font-size: 64px;
 `;
@@ -15,25 +26,35 @@ const IndicatorContainer = styled.div`
 const ControllerContainer = styled.div`
     display: flex;
     flex-direction: row;
-`
+`;
 
 const FlexButton = styled.button`
     display: flex;
-`
+`;
+
+function convertSecondToDisplayText(seconds: number) {
+    return formatDate(addSeconds(new Date(0), seconds), 'mm:ss');
+}
 
 const TimerCard: React.FC = (props) => {
+    const [start, stop, remainSeconds] = useTimer(10);
+
     return (
         <Container>
-            이름따리
+            <TimerNameSpan>이름따리</TimerNameSpan>
             <IndicatorContainer>
-                08:45
+                {convertSecondToDisplayText(remainSeconds)}
             </IndicatorContainer>
             <ControllerContainer>
-                <FlexButton>시작</FlexButton>
-                <FlexButton>정지</FlexButton>
+                <FlexButton onClick={() => {
+                    start();
+                }}>시작</FlexButton>
+                <FlexButton onClick={() => {
+                    stop();
+                }}>정지</FlexButton>
             </ControllerContainer>
         </Container>
-    )
+    );
 };
 
 export default TimerCard;
