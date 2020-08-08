@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
+import {floor} from 'lodash';
 import addSeconds from 'date-fns/addSeconds';
 import formatDate from 'date-fns/format';
 import styled from 'styled-components';
 import useTimer from '../../hooks/useTimer';
-import {SettingsIcon, XCircleIcon} from '@primer/octicons-react';
+import {CheckCircleIcon, SettingsIcon, XCircleIcon} from '@primer/octicons-react';
 
 
 const Container = styled.div`
@@ -32,11 +33,26 @@ const TimerNameSpan = styled.span`
     font-family: 'Cute Font', cursive;
 `;
 
+const TimerNameEditInput = styled.input`
+    font-size: 32px;
+    height: 34px;
+    margin-bottom: 5px;
+    font-family: 'Cute Font', cursive;
+    text-align: center;
+`;
+
 const IndicatorContainer = styled.div`
     cursor: default;
     user-select: none;
     font-family: 'Special Elite', cursive;
     font-size: 64px;
+`;
+
+const IndicatorSettingInput = styled.input`
+    font-family: 'Special Elite', cursive;
+    font-size: 64px;
+    height: 66px;    
+    width: 80px;
 `;
 
 const ControllerContainer = styled.div`
@@ -54,22 +70,95 @@ const FlexButton = styled.button`
     margin: 0 6px;
 `;
 
-function convertSecondToDisplayText(seconds: number) {
-    return formatDate(addSeconds(new Date(0), seconds), 'mm:ss');
+function convertSecondToDisplayText(seconds: number, format: string) {
+    return formatDate(addSeconds(new Date(0), seconds), format);
 }
 
+enum TimerCardStatusEnum {
+    STOPPED, SETTING, STARTED, PAUSED
+}
+
+
+const DUMMY_INITIAL_TIME = 10;
 const TimerCard: React.FC = (props) => {
-    const [start, stop, remainSeconds] = useTimer(10);
+    const [status, changeStatus] = useState(TimerCardStatusEnum.STOPPED);
+    const [title, setTitle] = useState('이름따리');
+
+    const [initialMinute, changeInitialMinute] = useState(floor(DUMMY_INITIAL_TIME / 60));
+    const [initialSecond, changeInitialSecond] = useState(DUMMY_INITIAL_TIME - floor(DUMMY_INITIAL_TIME / 60));
+
+    const [start, stop, remainSeconds, setInitialTimerSecond] = useTimer(initialMinute * 60 + initialSecond);
+
+    const isSettingMode = useMemo(() => status === TimerCardStatusEnum.SETTING, [status]);
+
+    const minute = useMemo(() => convertSecondToDisplayText(remainSeconds, 'mm'), [remainSeconds]);
+    const second = useMemo(() => convertSecondToDisplayText(remainSeconds, 'ss'), [remainSeconds]);
+
+    const handleEditMinute = useCallback((e) => {
+        const currentValue = e.target.valueAsNumber;
+        if (currentValue < 0 || !Number.isInteger(currentValue)) {
+            e.preventDefault();
+            return false;
+        }
+
+        changeInitialMinute(e.target.valueAsNumber);
+    }, []);
+
+    const handleEditSecond = useCallback((e) => {
+        const currentValue = e.target.valueAsNumber;
+        if (currentValue < 0 || !Number.isInteger(currentValue)) {
+            e.preventDefault();
+            return false;
+        }
+        if (currentValue > 60) {
+            const currentValueString = currentValue.toString();
+            e.target.valueAsNumber = parseInt(currentValueString[currentValueString.length - 1]);
+        }
+        changeInitialSecond(e.target.valueAsNumber);
+    }, []);
+
+    // 입력된 minute, second 에 대한 initialTime 반영 및 validation
+    const handleEditCompleted = useCallback(() => {
+        if (initialSecond > 60) {
+            changeInitialSecond(59);
+        }
+
+        setInitialTimerSecond(initialMinute * 60 + initialSecond);
+        changeStatus(TimerCardStatusEnum.STOPPED);
+    }, [initialSecond, initialMinute]);
 
     return (
         <Container>
             <Header>
-                <IconWrapper><SettingsIcon size={24}/></IconWrapper>
+                {
+                    isSettingMode ?
+                        <IconWrapper onClick={handleEditCompleted}><CheckCircleIcon size={24}/></IconWrapper> :
+                        <IconWrapper onClick={() => changeStatus(TimerCardStatusEnum.SETTING)}><SettingsIcon size={24}/></IconWrapper>
+                }
+
                 <IconWrapper><XCircleIcon size={24}/></IconWrapper>
             </Header>
-            <TimerNameSpan>이름따리</TimerNameSpan>
+            {
+                isSettingMode ?
+                    <TimerNameEditInput type={'text'} value={title} onChange={(e) => setTitle(e.target.value)}/> :
+                    <TimerNameSpan>{title}</TimerNameSpan>
+            }
             <IndicatorContainer>
-                {convertSecondToDisplayText(remainSeconds)}
+                {
+                    isSettingMode ?
+                        (
+                            <>
+                                <IndicatorSettingInput type={'number'} value={floor(initialMinute)}
+                                                       min={0} max={99}
+                                                       onChange={handleEditMinute}/>
+                                :
+                                <IndicatorSettingInput type={'number'} value={initialSecond}
+                                                       min={0} max={59}
+                                                       onChange={handleEditSecond}/>
+                            </>
+                        ) :
+                        `${minute}:${second}`
+                }
             </IndicatorContainer>
             <ControllerContainer>
                 <FlexButton onClick={() => {

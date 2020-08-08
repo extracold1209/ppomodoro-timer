@@ -1,10 +1,14 @@
 import {useCallback, useEffect, useState} from 'react';
 
-export default (initialSecond: number): [() => void, () => void, number] => {
+export default (initialSecond: number): [() => void, () => void, number, (newInitialSecond: number) => void] => {
     const [remainSeconds, changeSeconds] = useState(initialSecond);
     const [isStarted, setToggle] = useState(false);
-    const start = useCallback(() => { setToggle(true); }, []);
-    const stop = useCallback(() => { setToggle(false); }, []);
+    const start = useCallback(() => {
+        setToggle(true);
+    }, []);
+    const stop = useCallback(() => {
+        setToggle(false);
+    }, []);
 
     useEffect(() => {
         let timeout: number | undefined = undefined;
@@ -25,5 +29,5 @@ export default (initialSecond: number): [() => void, () => void, number] => {
         return () => clearTimeout(timeout);
     }, [isStarted, remainSeconds]);
 
-    return [start, stop, remainSeconds];
+    return [start, stop, remainSeconds, changeSeconds];
 };
