@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import TimerCard from "../atoms/TimerCard";
+import TimerCard from '../atoms/TimerCard';
 
 const CenterContainer = styled.div`
     display: flex;
@@ -16,7 +16,7 @@ const MainContainer: React.FC = () => {
             <div>Hello MainContainer</div>
             <TimerCard />
         </CenterContainer>
-    )
-}
+    );
+};
 
 export default MainContainer;
