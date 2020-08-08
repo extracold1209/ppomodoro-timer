@@ -5,17 +5,7 @@ import formatDate from 'date-fns/format';
 import styled from 'styled-components';
 import useTimer from '../../hooks/useTimer';
 import {CheckCircleIcon, SettingsIcon, XCircleIcon} from '@primer/octicons-react';
-
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 120px;
-    padding: 20px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    border-radius: 5px;
-`;
+import CardContainer from './CardContainer';
 
 const Header = styled.div`
     width: 100%;
@@ -80,13 +70,12 @@ enum TimerCardStatusEnum {
 }
 
 
-const DUMMY_INITIAL_TIME = 10;
-const TimerCard: React.FC = (props) => {
+const TimerCard: React.FC<{initialTime?: number}> = ({initialTime = 10}) => {
     const [status, changeStatus] = useState(TimerCardStatusEnum.STOPPED);
     const [title, setTitle] = useState('이름따리');
 
-    const [initialMinute, changeInitialMinute] = useState(floor(DUMMY_INITIAL_TIME / 60));
-    const [initialSecond, changeInitialSecond] = useState(DUMMY_INITIAL_TIME - floor(DUMMY_INITIAL_TIME / 60));
+    const [initialMinute, changeInitialMinute] = useState(floor(initialTime / 60));
+    const [initialSecond, changeInitialSecond] = useState(initialTime - floor(initialTime / 60));
 
     const [start, stop, remainSeconds, setInitialTimerSecond] = useTimer(initialMinute * 60 + initialSecond);
 
@@ -129,7 +118,7 @@ const TimerCard: React.FC = (props) => {
     }, [initialSecond, initialMinute]);
 
     return (
-        <Container>
+        <CardContainer>
             <Header>
                 {
                     isSettingMode ?
@@ -179,7 +168,7 @@ const TimerCard: React.FC = (props) => {
                     정지
                 </FlexButton>
             </ControllerContainer>
-        </Container>
+        </CardContainer>
     );
 };
 
