@@ -51,8 +51,9 @@ const IndicatorContainer = styled.div`
 const IndicatorSettingInput = styled.input`
     font-family: 'Special Elite', cursive;
     font-size: 64px;
-    height: 66px;    
-    width: 80px;
+    height: 46px;
+    padding-top: 14px;    
+    width: 82px;
 `;
 
 const ControllerContainer = styled.div`
