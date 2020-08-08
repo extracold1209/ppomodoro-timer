@@ -66,7 +66,7 @@ const FlexButton = styled.button`
     border: none;
     border-radius: 4px;
     background-color: lightgrey;
-    cursor: pointer;
+    cursor: ${({disabled}) => disabled ? 'not-allowed' : 'pointer'};
     padding: 7px 14px;
     margin: 0 6px;
 `;
@@ -162,12 +162,22 @@ const TimerCard: React.FC = (props) => {
                 }
             </IndicatorContainer>
             <ControllerContainer>
-                <FlexButton onClick={() => {
-                    start();
-                }}>시작</FlexButton>
-                <FlexButton onClick={() => {
-                    stop();
-                }}>정지</FlexButton>
+                <FlexButton
+                    disabled={status === TimerCardStatusEnum.SETTING}
+                    onClick={() => {
+                        start();
+                    }}
+                >
+                    시작
+                </FlexButton>
+                <FlexButton
+                    disabled={status === TimerCardStatusEnum.SETTING}
+                    onClick={() => {
+                        stop();
+                    }}
+                >
+                    정지
+                </FlexButton>
             </ControllerContainer>
         </Container>
     );
