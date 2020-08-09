@@ -51,16 +51,6 @@ const ControllerContainer = styled.div`
     flex-direction: row;
 `;
 
-const FlexButton = styled.button`
-    display: flex;
-    border: none;
-    border-radius: 4px;
-    background-color: lightgrey;
-    cursor: ${({disabled}) => disabled ? 'not-allowed' : 'pointer'};
-    padding: 7px 14px;
-    margin: 0 6px;
-`;
-
 function convertSecondToDisplayText(seconds: number, format: string) {
     return formatDate(addSeconds(new Date(0), seconds), format);
 }
@@ -89,6 +79,10 @@ const TimerCard: React.FC<{initialTime?: number}> = ({initialTime = 10}) => {
         if (currentValue < 0 || !Number.isInteger(currentValue)) {
             e.preventDefault();
             return false;
+        }
+        if (currentValue > 90) {
+            const currentValueString = currentValue.toString();
+            e.target.valueAsNumber = parseInt(currentValueString[currentValueString.length - 1]);
         }
 
         changeInitialMinute(e.target.valueAsNumber);
@@ -150,24 +144,24 @@ const TimerCard: React.FC<{initialTime?: number}> = ({initialTime = 10}) => {
                         `${minute}:${second}`
                 }
             </IndicatorContainer>
-            <ControllerContainer>
-                <FlexButton
+            {/*<ControllerContainer>
+                <Button
                     disabled={status === TimerCardStatusEnum.SETTING}
                     onClick={() => {
                         start();
                     }}
                 >
                     시작
-                </FlexButton>
-                <FlexButton
+                </Button>
+                <Button
                     disabled={status === TimerCardStatusEnum.SETTING}
                     onClick={() => {
                         stop();
                     }}
                 >
                     정지
-                </FlexButton>
-            </ControllerContainer>
+                </Button>
+            </ControllerContainer>*/}
         </CardContainer>
     );
 };
