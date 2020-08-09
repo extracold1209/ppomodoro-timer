@@ -60,9 +60,9 @@ enum TimerCardStatusEnum {
 }
 
 
-const TimerCard: React.FC<{initialTime?: number}> = ({initialTime = 10}) => {
+const TimerCard: React.FC<{initialTime?: number; title?: string;}> = ({initialTime = 10, title: propTitle}) => {
     const [status, changeStatus] = useState(TimerCardStatusEnum.STOPPED);
-    const [title, setTitle] = useState('이름따리');
+    const [title, setTitle] = useState(propTitle);
 
     const [initialMinute, changeInitialMinute] = useState(floor(initialTime / 60));
     const [initialSecond, changeInitialSecond] = useState(initialTime - floor(initialTime / 60));

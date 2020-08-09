@@ -1,4 +1,14 @@
-import {createStore} from 'redux';
-import reducer from './common';
+import {combineReducers, createStore} from 'redux';
+import common, {CommonReducer} from './common';
+import timer, {TimerReducer} from './timer';
 
-export default createStore(reducer);
+export interface ReduxStore {
+    common: CommonReducer;
+    timer : TimerReducer;
+}
+
+
+export default createStore(combineReducers<ReduxStore>({
+    common,
+    timer,
+}));

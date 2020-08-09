@@ -1,16 +1,19 @@
-import {AnyAction, Reducer} from "redux";
+import {AnyAction, Reducer} from 'redux';
 import produce from 'immer';
 
+export interface CommonReducer {
+    count: number;
+}
 
 const SAY_HELLO = 'common/SAY_HELLO';
 
-export const sayHelloAction: AnyAction = { type: SAY_HELLO }
+export const sayHelloAction: AnyAction = { type: SAY_HELLO };
 
-const defaultState = {
+const defaultState: CommonReducer = {
     count: 1,
-}
+};
 
-const reducer: Reducer<typeof defaultState> = (state = defaultState, action) => {
+const reducer: Reducer<CommonReducer> = (state = defaultState, action) => {
     const {type, payload} = action;
 
     switch(type) {
@@ -22,6 +25,6 @@ const reducer: Reducer<typeof defaultState> = (state = defaultState, action) => 
         default:
             return state;
     }
-}
+};
 
 export default reducer;
