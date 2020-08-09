@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../atoms/Button';
 
+
 const FooterContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -9,10 +10,9 @@ const FooterContainer = styled.div`
     margin-top: 1rem;
     padding: 1rem;
     background-color: rgb(245, 195, 64);
-    position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
+    height: 100px;
 `;
 
 const Footer: React.FC = () => {

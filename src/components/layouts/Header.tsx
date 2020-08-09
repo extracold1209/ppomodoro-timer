@@ -7,7 +7,7 @@ const HeaderContainer = styled.header`
     background-color: rgb(245, 195, 64);
     top: 0;
     left: 0;
-    width: 100%;
+    height: 100px;
 `;
 
 const Header: React.FC = () => {
