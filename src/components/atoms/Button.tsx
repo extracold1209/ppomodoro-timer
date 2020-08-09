@@ -8,6 +8,7 @@ const Button = styled.button`
     cursor: ${({disabled}) => disabled ? 'not-allowed' : 'pointer'};
     padding: 7px 14px;
     margin: 0 6px;
+    height: fit-content;
 `;
 
 export default Button;

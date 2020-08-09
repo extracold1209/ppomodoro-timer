@@ -5,6 +5,7 @@ import Button from '../atoms/Button';
 const FooterContainer = styled.div`
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 1rem;
     padding: 1rem;
     background-color: rgb(245, 195, 64);

@@ -25,7 +25,7 @@ const TimerNameSpan = styled.span`
 
 const TimerNameEditInput = styled.input`
     font-size: 32px;
-    height: 34px;
+    height: 48px;
     margin-bottom: 5px;
     font-family: 'Cute Font', cursive;
     text-align: center;
@@ -41,14 +41,9 @@ const IndicatorContainer = styled.div`
 const IndicatorSettingInput = styled.input`
     font-family: 'Special Elite', cursive;
     font-size: 64px;
-    height: 46px;
+    height: 60px;
     padding-top: 14px;    
-    width: 82px;
-`;
-
-const ControllerContainer = styled.div`
-    display: flex;
-    flex-direction: row;
+    width: 90px;
 `;
 
 function convertSecondToDisplayText(seconds: number, format: string) {
