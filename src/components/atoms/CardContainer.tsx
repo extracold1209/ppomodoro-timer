@@ -1,9 +1,14 @@
+import React from 'react';
 import styled from 'styled-components';
 
-export default styled.div`
+const CardWrapper = styled.div`
+    padding: 10px 30px;
+    background-color: transparent;
+`;
+
+const CardContainer = styled.div`
     display: flex;
-    width: 100%;
-    min-height: 200px;
+    height: 55vh;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -12,3 +17,13 @@ export default styled.div`
     border-radius: 5px;
     background-color: white;
 `;
+
+const CardContainerFC: React.FC<{onClick?: () => void}> = ({children, onClick}) => (
+    <CardWrapper onClick={onClick}>
+        <CardContainer>
+            {children}
+        </CardContainer>
+    </CardWrapper>
+);
+
+export default CardContainerFC;

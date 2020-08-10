@@ -4,19 +4,17 @@ import Footer from '../layouts/Footer';
 import Header from '../layouts/Header';
 import {useSelector} from 'react-redux';
 import {ReduxStore} from '../../stores';
-import Carousel from 'react-items-carousel';
 import styled from 'styled-components';
+import AliceCarousel from 'react-alice-carousel';
+import 'react-alice-carousel/lib/alice-carousel.css';
 
-const CardWrapper = styled.div`
-    padding: 10px;
-    background-color: transparent;
+const ContentContainer = styled.div`
+    height: calc(81vh - 31px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
-const ContentContainer = styled.div<{ chevronWidth: number }>`
-    padding: 0 ${({chevronWidth}) => chevronWidth}px;
-`;
-
-const chevronWidth = 30;
 
 const CarouselContainer: React.FC = () => {
     const [activeItemIndex, setActiveItemIndex] = useState(0);
@@ -24,42 +22,33 @@ const CarouselContainer: React.FC = () => {
 
 
     return (
-        <div style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-        }}>
+        <>
             <Header/>
-            <div style={{
-                height: 'calc(100vh - 200px)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}>
-                <Carousel
-                    requestToChangeActive={setActiveItemIndex}
-                    activeItemIndex={activeItemIndex}
-                    numberOfCards={1}
-                    gutter={20}
-                    leftChevron={<button>{'<'}</button>}
-                    rightChevron={<button>{'>'}</button>}
-                    outsideChevron
-                    chevronWidth={chevronWidth}
-                >
-                    {
-                        timers.map(({initialSecond, title}, index) => (
-                            <CardWrapper key={`card-${index}`}>
+            <ContentContainer>
+                    <AliceCarousel
+                        mouseTrackingEnabled={true}
+                        infinite={false}
+                        buttonsDisabled={true}
+                        stagePadding={{
+                            paddingLeft: 5,
+                            paddingRight: 5,
+                        }}
+                    >
+                        {
+                            timers.map(({initialSecond, title}, index) => (
                                 <TimerCard
                                     initialTime={initialSecond}
                                     title={title}
                                 />
-                            </CardWrapper>
-                        ))
-                    }
-                </Carousel>
-            </div>
+                                /*<CardWrapper key={`card-${index}`}>
+
+                                </CardWrapper>*/
+                            ))
+                        }
+                    </AliceCarousel>
+            </ContentContainer>
             <Footer/>
-        </div>
+        </>
     );
 };
 
