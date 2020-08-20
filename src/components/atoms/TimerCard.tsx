@@ -9,13 +9,16 @@ import CardContainer from './CardContainer';
 
 const Header = styled.div`
     width: 100%;
+    position: absolute;
+    top: 30px;
+    right: 63px;
     display: flex;
     justify-content: flex-end;
 `;
 
 const IconWrapper = styled.div`
     opacity: 0.7;
-    margin-left: 5px;
+    margin-left: 10px;
 `;
 
 const TimerNameSpan = styled.span`
@@ -111,11 +114,11 @@ const TimerCard: React.FC<{initialTime?: number; title?: string;}> = ({initialTi
             <Header>
                 {
                     isSettingMode ?
-                        <IconWrapper onClick={handleEditCompleted}><CheckCircleIcon size={24}/></IconWrapper> :
-                        <IconWrapper onClick={() => changeStatus(TimerCardStatusEnum.SETTING)}><SettingsIcon size={24}/></IconWrapper>
+                        <IconWrapper onClick={handleEditCompleted}><CheckCircleIcon size={36}/></IconWrapper> :
+                        <IconWrapper onClick={() => changeStatus(TimerCardStatusEnum.SETTING)}><SettingsIcon size={36}/></IconWrapper>
                 }
 
-                <IconWrapper><XCircleIcon size={24}/></IconWrapper>
+                <IconWrapper><XCircleIcon size={36}/></IconWrapper>
             </Header>
             {
                 isSettingMode ?

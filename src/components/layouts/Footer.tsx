@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
 import Button from '../atoms/Button';
+import {useDispatch} from 'react-redux';
+import {changeTimerStatus, TimerStatusEnum} from '../../stores/timer';
 
 
 const FooterContainer = styled.div`
@@ -18,10 +20,16 @@ const FooterContainer = styled.div`
 `;
 
 const Footer: React.FC = () => {
+    const dispatch = useDispatch();
+
+    const handleStartButton = useCallback((nextStatus: TimerStatusEnum) => {
+        dispatch(changeTimerStatus(nextStatus));
+    }, []);
+
     return (
         <FooterContainer>
-            <Button>시작</Button>
-            <Button>정지</Button>
+            <Button onClick={() => handleStartButton(TimerStatusEnum.RUNNING)}>시작</Button>
+            <Button onClick={() => handleStartButton(TimerStatusEnum.STOPPED)}>정지</Button>
         </FooterContainer>
     );
 };
