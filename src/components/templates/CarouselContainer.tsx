@@ -7,7 +7,7 @@ import {RootState} from '../../stores';
 import styled from 'styled-components';
 import AliceCarousel, {EventObject} from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
-import {selectTimerIndex, TimerReducer, TimerStatusEnum} from '../../stores/timer';
+import {selectTimerIndex, TimerReducer} from '../../stores/timer';
 
 const ContentContainer = styled.div`
     height: calc(81vh - 31px);
@@ -21,7 +21,6 @@ const ContentContainer = styled.div`
 const CarouselContainer: React.FC = () => {
     const {
         timers,
-        status: timerStatus,
         currentSelectedTimerIndex: currentTimerIndex
     } = useSelector<RootState, TimerReducer>((state) => state.timer);
     const dispatch = useDispatch();
@@ -38,8 +37,8 @@ const CarouselContainer: React.FC = () => {
                     startIndex={currentTimerIndex}
                     mouseTrackingEnabled={true}
                     infinite={false}
-                    swipeDisabled={timerStatus === TimerStatusEnum.RUNNING}
-                    dotsDisabled={timerStatus === TimerStatusEnum.RUNNING}
+                    // swipeDisabled={timerStatus === TimerStatusEnum.RUNNING}
+                    // dotsDisabled={timerStatus === TimerStatusEnum.RUNNING}
                     buttonsDisabled={true}
                     stagePadding={{
                         paddingLeft: 5,
