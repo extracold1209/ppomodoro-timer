@@ -1,32 +1,20 @@
-import {makePayloadAction} from './functions';
-import {Reducer} from 'redux';
-import {produce} from 'immer';
+import {createAction, createReducer, PayloadAction} from '@reduxjs/toolkit';
 
 export enum TimerStatusEnum {
-    STOPPED,
-    RUNNING
+    STOPPED, RUNNING
 }
 
-// interfaces
 export interface TimerReducer {
     currentSelectedTimerIndex: number;
     timers: Timer[];
     status: TimerStatusEnum;
 }
 
-// types
-const ADDED = 'TIMER/ADDED';
-const REMOVED = 'TIMER/REMOVED';
-const STATUS_CHANGED = 'TIMER/STATUS_CHANGED';
-const TIMER_SELECTED = 'TIMER/TIMER_SELECTED';
+export const addTimer = createAction<Timer>('TIMER/ADDED');
+export const removeTimer = createAction<number>('TIMER/REMOVED');
+export const changeTimerStatus = createAction<TimerStatusEnum>('TIMER/STATUS_CHANGED');
+export const selectTimerIndex = createAction<number>('TIMER/TIMER_SELECTED');
 
-// actions
-export const addTimer = makePayloadAction<Timer>(ADDED);
-export const removeTimer = makePayloadAction<number>(REMOVED); // Timer[] 의 index 가 들어가야 한다.
-export const changeTimerStatus = makePayloadAction<TimerStatusEnum>(STATUS_CHANGED);
-export const selectTimerIndex = makePayloadAction<number>(TIMER_SELECTED);
-
-// defaultState
 const defaultState: TimerReducer = {
     currentSelectedTimerIndex: 0,
     timers: [
@@ -38,29 +26,17 @@ const defaultState: TimerReducer = {
     status: TimerStatusEnum.STOPPED,
 };
 
-// reducer
-const reducer: Reducer<TimerReducer> = (state = defaultState, action) => {
-    const {type, payload} = action;
-    switch (type) {
-        case ADDED:
-            return produce(state, (next) => {
-                next.timers = [...state.timers, payload as Timer];
-            });
-        case REMOVED:
-            return produce(state, (next) => {
-                next.timers = state.timers.splice(payload as number, 1);
-            });
-        case STATUS_CHANGED:
-            return produce(state, (next) => {
-                next.status = payload as TimerStatusEnum;
-            });
-        case TIMER_SELECTED:
-            return produce(state, (next) => {
-                next.currentSelectedTimerIndex = payload as number;
-            });
-        default:
-            return state;
+export default createReducer(defaultState, {
+    [addTimer.type]: (state, {payload}: PayloadAction<Timer>) => {
+        state.timers = [...state.timers, payload];
+    },
+    [removeTimer.type]: (state, {payload}: PayloadAction<number>) => {
+        state.timers = state.timers.splice(payload, 1);
+    },
+    [changeTimerStatus.type]: (state, {payload}: PayloadAction<TimerStatusEnum>) => {
+        state.status = payload;
+    },
+    [selectTimerIndex.type]: (state, {payload}: PayloadAction<number>) => {
+        state.currentSelectedTimerIndex = payload;
     }
-};
-
-export default reducer;
+});

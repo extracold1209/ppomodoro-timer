@@ -3,7 +3,7 @@ import TimerCard from '../atoms/TimerCard';
 import Footer from '../layouts/Footer';
 import Header from '../layouts/Header';
 import {useDispatch, useSelector} from 'react-redux';
-import {ReduxStore} from '../../stores';
+import {RootState} from '../../stores';
 import styled from 'styled-components';
 import AliceCarousel, {EventObject} from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
@@ -23,7 +23,7 @@ const CarouselContainer: React.FC = () => {
         timers,
         status: timerStatus,
         currentSelectedTimerIndex: currentTimerIndex
-    } = useSelector<ReduxStore, TimerReducer>((state) => state.timer);
+    } = useSelector<RootState, TimerReducer>((state) => state.timer);
     const dispatch = useDispatch();
 
     const handleOnSlideChanged = useCallback((e: EventObject) => {

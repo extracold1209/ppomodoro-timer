@@ -6,7 +6,7 @@ import AddTimerCard from '../atoms/AddTimerCard';
 import Footer from '../layouts/Footer';
 import Header from '../layouts/Header';
 import {useDispatch, useSelector} from 'react-redux';
-import {ReduxStore} from '../../stores';
+import {RootState} from '../../stores';
 import {addTimer} from '../../stores/timer';
 
 const CardWrapper: React.FC = ({children, ...props}) => (
@@ -18,7 +18,7 @@ const CardWrapper: React.FC = ({children, ...props}) => (
 );
 
 const MainContainer: React.FC = () => {
-    const timers = useSelector<ReduxStore, Timer[]>((state) => state.timer.timers);
+    const timers = useSelector<RootState, Timer[]>((state) => state.timer.timers);
     const dispatch = useDispatch();
 
     const handleAddTimerClicked = useCallback(() => {

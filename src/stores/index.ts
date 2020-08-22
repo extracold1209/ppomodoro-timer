@@ -1,14 +1,13 @@
-import {combineReducers, createStore} from 'redux';
-import common, {CommonReducer} from './common';
-import timer, {TimerReducer} from './timer';
+import {configureStore} from '@reduxjs/toolkit';
+import common from './common';
+import timer from './timer';
 
-export interface ReduxStore {
-    common: CommonReducer;
-    timer : TimerReducer;
-}
+const store = configureStore({
+    reducer: {
+        common, timer
+    }
+});
 
 
-export default createStore(combineReducers<ReduxStore>({
-    common,
-    timer,
-}));
+export type RootState = ReturnType<typeof store.getState>;
+export default store;
