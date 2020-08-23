@@ -43,6 +43,7 @@
     "react-alice-carousel": "^1.19.3",
     "react-dom": "^16.13.1",
     "react-grid-system": "^7.0.3",
+    "react-icons": "^3.11.0",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
     "storybook": "^5.3.19",

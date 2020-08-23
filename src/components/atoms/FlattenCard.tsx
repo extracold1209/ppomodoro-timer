@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import useTimer from '../../hooks/useTimer';
+import {BiPlayCircle, BiStopCircle} from 'react-icons/bi/index';
 
 const CardContainer = styled.div`
     width: 100%;
@@ -45,14 +46,12 @@ const FlattenCard: React.FC<{ timer: Timer }> = (props) => {
                     {title || '타이틀이 없어욧'}
                 </HeaderTitleContainer>
                 <HeaderButtonContainer>
-                    <button onClick={() => {
+                    <BiPlayCircle size={24} onClick={() => {
                         start();
-                    }}>실행
-                    </button>
-                    <button onClick={() => {
+                    }}/>
+                    <BiStopCircle size={24} onClick={() => {
                         stop();
-                    }}>정지
-                    </button>
+                    }}/>
                 </HeaderButtonContainer>
             </HeaderContainer>
             <ContentContainer>
