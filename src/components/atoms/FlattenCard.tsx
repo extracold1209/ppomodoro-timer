@@ -34,7 +34,7 @@ const ContentContainer = styled.div`
     display: flex;
 `;
 
-const FlattenCard: React.FC<{ timer: Timer }> = (props) => {
+const FlattenCard: React.FC<{ timer: Timer, onDelete?: () => void }> = (props) => {
     const {timer} = props;
     const {title, initialSecond} = timer;
     const [start, stop, remainSeconds] = useTimer(initialSecond);
@@ -51,28 +51,28 @@ const FlattenCard: React.FC<{ timer: Timer }> = (props) => {
     }, []);
 
     const handleDeleteButtonClicked = useCallback(() => {
-        console.log('hello');
+        props.onDelete?.();
     }, []);
 
     return (
-        <CardContainer>
-            <HeaderContainer>
-                <HeaderTitleContainer>
-                    {title || '타이틀이 없어욧'}
-                </HeaderTitleContainer>
-                <HeaderButtonContainer>
-                    {
-                        isTimerRunning
-                            ? <BiStopCircle size={24} onClick={handleStopButtonClicked}/>
-                            : <BiPlayCircle size={24} onClick={handlePlayButtonClicked}/>
-                    }
-                    <BiXCircle size={24} onClick={handleDeleteButtonClicked} />
-                </HeaderButtonContainer>
-            </HeaderContainer>
-            <ContentContainer>
-                {remainSeconds} / {initialSecond}
-            </ContentContainer>
-        </CardContainer>
+            <CardContainer>
+                <HeaderContainer>
+                    <HeaderTitleContainer>
+                        {title || '타이틀이 없어욧'}
+                    </HeaderTitleContainer>
+                    <HeaderButtonContainer>
+                        {
+                            isTimerRunning
+                                ? <BiStopCircle size={24} onClick={handleStopButtonClicked}/>
+                                : <BiPlayCircle size={24} onClick={handlePlayButtonClicked}/>
+                        }
+                        <BiXCircle size={24} onClick={handleDeleteButtonClicked}/>
+                    </HeaderButtonContainer>
+                </HeaderContainer>
+                <ContentContainer>
+                    {remainSeconds} / {initialSecond}
+                </ContentContainer>
+            </CardContainer>
     );
 };
 

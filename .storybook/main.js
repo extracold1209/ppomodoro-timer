@@ -6,8 +6,12 @@ module.exports = {
       test: /\.tsx?$/,
       loader: 'ts-loader',
       exclude: /node_modules/,
+    }, {
+      test: /\.css$/,
+      loader: ['style-loader', 'css-loader'],
+      exclude: /node_modules/,
     });
-    config.resolve.extensions.push('.ts', '.tsx');
+    config.resolve.extensions.push('.ts', '.tsx', '.css');
 
     return config;
   },

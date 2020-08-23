@@ -19,6 +19,7 @@ reducer
  */
 
 import {createAction, createReducer, PayloadAction} from '@reduxjs/toolkit';
+import {pullAt} from 'lodash';
 
 export interface TimerReducer {
     timers: Timer[];
@@ -46,7 +47,7 @@ export default createReducer(defaultState, {
         state.timers = [...state.timers, payload];
     },
     [removeTimer.type]: (state, {payload}: PayloadAction<number>) => {
-        state.timers = state.timers.splice(payload, 1);
+        state.timers.splice(payload, 1);
     },
     [selectTimerIndex.type]: (state, {payload}: PayloadAction<number>) => {
         state.currentSelectedTimerIndex = payload;
