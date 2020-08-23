@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import useTimer from '../../hooks/useTimer';
 import {BiPlayCircle, BiStopCircle} from 'react-icons/bi/index';
@@ -38,6 +38,17 @@ const FlattenCard: React.FC<{ timer: Timer }> = (props) => {
     const {timer} = props;
     const {title, initialSecond} = timer;
     const [start, stop, remainSeconds] = useTimer(initialSecond);
+    const [isTimerRunning, setTimerStatus] = useState(false);
+
+    const handlePlayButtonClicked = useCallback(() => {
+        setTimerStatus(true);
+        start();
+    }, []);
+
+    const handleStopButtonClicked = useCallback(() => {
+        setTimerStatus(false);
+        stop();
+    }, []);
 
     return (
         <CardContainer>
@@ -46,12 +57,11 @@ const FlattenCard: React.FC<{ timer: Timer }> = (props) => {
                     {title || '타이틀이 없어욧'}
                 </HeaderTitleContainer>
                 <HeaderButtonContainer>
-                    <BiPlayCircle size={24} onClick={() => {
-                        start();
-                    }}/>
-                    <BiStopCircle size={24} onClick={() => {
-                        stop();
-                    }}/>
+                    {
+                        isTimerRunning
+                            ? <BiStopCircle size={24} onClick={handleStopButtonClicked}/>
+                            : <BiPlayCircle size={24} onClick={handlePlayButtonClicked}/>
+                    }
                 </HeaderButtonContainer>
             </HeaderContainer>
             <ContentContainer>
