@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import useTimer from '../../hooks/useTimer';
-import {BiPlayCircle, BiStopCircle} from 'react-icons/bi/index';
+import {BiPlayCircle, BiStopCircle, BiXCircle} from 'react-icons/bi/index';
 
 const CardContainer = styled.div`
     width: 100%;
@@ -50,6 +50,10 @@ const FlattenCard: React.FC<{ timer: Timer }> = (props) => {
         stop();
     }, []);
 
+    const handleDeleteButtonClicked = useCallback(() => {
+        console.log('hello');
+    }, []);
+
     return (
         <CardContainer>
             <HeaderContainer>
@@ -62,6 +66,7 @@ const FlattenCard: React.FC<{ timer: Timer }> = (props) => {
                             ? <BiStopCircle size={24} onClick={handleStopButtonClicked}/>
                             : <BiPlayCircle size={24} onClick={handlePlayButtonClicked}/>
                     }
+                    <BiXCircle size={24} onClick={handleDeleteButtonClicked} />
                 </HeaderButtonContainer>
             </HeaderContainer>
             <ContentContainer>
