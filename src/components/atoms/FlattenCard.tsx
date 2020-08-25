@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import useTimer from '../../hooks/useTimer';
-import {BiPlayCircle, BiStopCircle, BiXCircle, BiCog} from 'react-icons/bi/index';
+import {BiCog, BiPlayCircle, BiStopCircle, BiXCircle} from 'react-icons/bi';
 
 const CardContainer = styled.div`
     width: 100%;
@@ -25,9 +25,7 @@ const HeaderContainer = styled.div`
 const HeaderIconContainer = styled.div`
     display: flex;
     position: absolute;
-    top: 0;
-    right: 0;
-    padding-top: 10px;
+    right: 15px;
     padding-right: 10px;
     
     > *:not(:last-child) {
