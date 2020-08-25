@@ -1,7 +1,8 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import useTimer from '../../hooks/useTimer';
 import {BiCog, BiPlayCircle, BiStopCircle, BiXCircle} from 'react-icons/bi';
+import useAudio from "../../hooks/useAudio";
 
 const CardContainer = styled.div`
     width: 100%;
@@ -46,6 +47,7 @@ const FlattenCard: React.FC<{ timer: Timer, onDelete?: () => void }> = (props) =
     const {timer} = props;
     const {title, initialSecond} = timer;
     const [start, stop, remainSeconds] = useTimer(initialSecond);
+    const [isPlaying, toggle] = useAudio('/public/sounds/dudungtak.mp3');
     const [isTimerRunning, setTimerStatus] = useState(false);
 
     const handlePlayButtonClicked = useCallback(() => {
@@ -58,10 +60,15 @@ const FlattenCard: React.FC<{ timer: Timer, onDelete?: () => void }> = (props) =
         stop();
     }, []);
 
+    useEffect(() => {
+        if (remainSeconds === 0) {
+            toggle();
+        }
+    }, [remainSeconds]);
+
     const handleDeleteButtonClicked = useCallback(() => {
         props.onDelete?.();
     }, []);
-
     return (
             <CardContainer>
                 <HeaderContainer>
