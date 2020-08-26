@@ -1,8 +1,11 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import useTimer from '../../hooks/useTimer';
 import {BiCog, BiPlayCircle, BiStopCircle, BiXCircle} from 'react-icons/bi';
-import useAudio from "../../hooks/useAudio";
+import useAudio from '../../hooks/useAudio';
+import {useDrag, useDrop, XYCoord} from 'react-dnd';
+import {changeTimerOrder} from '../../stores/timer';
+import {useDispatch} from 'react-redux';
 
 const CardContainer = styled.div`
     width: 100%;
@@ -43,9 +46,77 @@ const ContentContainer = styled.div`
     font-size: 32px;
 `;
 
-const FlattenCard: React.FC<{ timer: Timer, onDelete?: () => void }> = (props) => {
-    const {timer} = props;
+type DragItem = {
+    index: number
+    id: string
+    type: string
+}
+
+const FlattenCard: React.FC<{ timer: Timer, onDelete?: () => void, index?: number }> = (props) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const dispatch = useDispatch();
+    const {timer, index, onDelete} = props;
     const {title, initialSecond} = timer;
+
+    const [, drop] = useDrop({
+        accept: 'FlattenCard',
+        hover(item: DragItem, monitor) {
+            if (!ref.current) {
+                return;
+            }
+
+            const dragIndex = item.index;
+            const hoverIndex = index || 0;
+
+            // Don't replace items with themselves
+            if (dragIndex === hoverIndex) {
+                return;
+            }
+
+            // Determine rectangle on screen
+            const hoverBoundingRect = ref.current?.getBoundingClientRect();
+
+            // Get vertical middle
+            const hoverMiddleY =
+                (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+            // Determine mouse position
+            const clientOffset = monitor.getClientOffset();
+
+            // Get pixels to the top
+            const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+
+            // Only perform the move when the mouse has crossed half of the items height
+            // When dragging downwards, only move when the cursor is below 50%
+            // When dragging upwards, only move when the cursor is above 50%
+
+            // Dragging downwards
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+                return;
+            }
+
+            // Dragging upwards
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+                return;
+            }
+
+            // Time to actually perform the action
+            // moveCard(dragIndex, hoverIndex)
+            dispatch(changeTimerOrder([dragIndex, hoverIndex]));
+            // Note: we're mutating the monitor item here!
+            // Generally it's better to avoid mutations,
+            // but it's good here for the sake of performance
+            // to avoid expensive index searches.
+            item.index = hoverIndex;
+        }
+    });
+
+    const [, drag] = useDrag({
+        item: {
+            type: 'FlattenCard',
+            ...props
+        },
+    });
     const [start, stop, remainSeconds] = useTimer(initialSecond);
     const [isPlaying, toggle] = useAudio('/public/sounds/dudungtak.mp3');
     const [isTimerRunning, setTimerStatus] = useState(false);
@@ -67,10 +138,12 @@ const FlattenCard: React.FC<{ timer: Timer, onDelete?: () => void }> = (props) =
     }, [remainSeconds]);
 
     const handleDeleteButtonClicked = useCallback(() => {
-        props.onDelete?.();
+        onDelete?.();
     }, []);
+
+    drag(drop(ref));
     return (
-            <CardContainer>
+            <CardContainer ref={ref}>
                 <HeaderContainer>
                     <HeaderTitleContainer>
                         {title || '타이틀이 없어욧'}

@@ -1,4 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
+import {HTML5Backend} from 'react-dnd-html5-backend';
+import {DndProvider} from 'react-dnd';
 import Header from '../layouts/Header';
 import {Container, Row} from 'react-grid-system';
 import FlattenCard from '../atoms/FlattenCard';
@@ -33,27 +35,30 @@ const MainCardContainer: React.FC = () => {
     return (
         <>
             <Header/>
-            <Container fluid>
-                {
-                    timers.map((timer, index) => (
-                        <Fade enter={noneFadedTimers[index]}
-                              onFaded={() => onCardFadeEnd(index)}
-                              key={`card-${index}`}
-                        >
-                            <Row
-                                gutterWidth={5}
-                                align={'center'}
-                                style={{marginBottom: 10}}
+            <DndProvider backend={HTML5Backend}>
+                <Container fluid>
+                    {
+                        timers.map((timer, index) => (
+                            <Fade enter={noneFadedTimers[index]}
+                                  onFaded={() => onCardFadeEnd(index)}
+                                  key={`card-${index}`}
                             >
-                                <FlattenCard
-                                    timer={timer}
-                                    onDelete={() => onCardDelete(index)}
-                                />
-                            </Row>
-                        </Fade>
-                    ))
-                }
-            </Container>
+                                <Row
+                                    gutterWidth={5}
+                                    align={'center'}
+                                    style={{marginBottom: 10}}
+                                >
+                                    <FlattenCard
+                                        index={index}
+                                        timer={timer}
+                                        onDelete={() => onCardDelete(index)}
+                                    />
+                                </Row>
+                            </Fade>
+                        ))
+                    }
+                </Container>
+            </DndProvider>
         </>
     );
 };

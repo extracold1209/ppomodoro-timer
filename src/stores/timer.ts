@@ -19,7 +19,7 @@ reducer
  */
 
 import {createAction, createReducer, PayloadAction} from '@reduxjs/toolkit';
-import {pullAt} from 'lodash';
+import {cloneDeep} from 'lodash';
 
 export interface TimerReducer {
     timers: Timer[];
@@ -51,5 +51,13 @@ export default createReducer(defaultState, {
     },
     [selectTimerIndex.type]: (state, {payload}: PayloadAction<number>) => {
         state.currentSelectedTimerIndex = payload;
+    },
+    [changeTimerOrder.type]: (state, {payload}: PayloadAction<[number, number]>) => {
+        const [prev, next] = payload;
+        const nextTimers = cloneDeep(state.timers);
+        const tempTimerObject = nextTimers[prev];
+        nextTimers[prev] = nextTimers[next];
+        nextTimers[next] = tempTimerObject;
+        state.timers = nextTimers;
     }
 });
