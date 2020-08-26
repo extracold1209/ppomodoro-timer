@@ -27,7 +27,7 @@ export default (initialSecond: number): [() => void, () => void, number, (newIni
         }
 
         return () => clearTimeout(timeout);
-    }, [isStarted, remainSeconds]);
+    }, [isStarted, remainSeconds, initialSecond]);
 
     return [start, stop, remainSeconds, changeSeconds];
 };
