@@ -44,7 +44,7 @@ const defaultState: TimerReducer = {
 
 export default createReducer(defaultState, {
     [addTimer.type]: (state, {payload}: PayloadAction<Timer>) => {
-        state.timers = [...state.timers, payload];
+        state.timers = [payload, ...state.timers];
     },
     [removeTimer.type]: (state, {payload}: PayloadAction<number>) => {
         state.timers.splice(payload, 1);

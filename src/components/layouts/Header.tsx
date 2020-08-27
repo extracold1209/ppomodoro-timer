@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
-import Modal from 'react-modal';
+import {BiPlusCircle} from 'react-icons/bi';
+import {useDispatch} from 'react-redux';
+import {addTimer} from '../../stores/timer';
 
 const HeaderContainer = styled.header`
     display:flex;
@@ -13,57 +15,26 @@ const HeaderContainer = styled.header`
     height: 4vh;
 `;
 
-const customStyles = {
-    content : {
-        top                   : '50%',
-        left                  : '50%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        transform             : 'translate(-50%, -50%)'
-    }
-};
+const PlusCircleWrapper = styled.div`
+    cursor: pointer;
+    display: flex;
+    position: absolute;
+    right: 10px;
+`;
 
 const Header: React.FC = () => {
-    let subtitle: any = {};
-    const [modalIsOpen,setIsOpen] = React.useState(false);
-    function openModal() {
-        setIsOpen(true);
-    }
+    const dispatch = useDispatch();
 
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        subtitle.style.color = '#f00';
-    }
-
-    function closeModal(){
-        setIsOpen(false);
-    }
-
+    const handleCircleClicked = useCallback(() => {
+        dispatch(addTimer({title: '아무거나', initialSecond: parseInt((Math.random() * 100).toFixed(0))}));
+    }, []);
 
     return (
         <HeaderContainer>
             Hello?
-            <button onClick={openModal}>Modal</button>
-            <Modal
-                isOpen={modalIsOpen}
-                onAfterOpen={afterOpenModal}
-                onRequestClose={closeModal}
-                style={customStyles}
-                contentLabel="Example Modal"
-            >
-
-                <h2 ref={_subtitle => (subtitle = _subtitle)}>Hello</h2>
-                <button onClick={closeModal}>close</button>
-                <div>I am a modal</div>
-                <form>
-                    <input />
-                    <button>tab navigation</button>
-                    <button>stays</button>
-                    <button>inside</button>
-                    <button>the modal</button>
-                </form>
-            </Modal>
+            <PlusCircleWrapper onClick={handleCircleClicked}>
+                <BiPlusCircle size={24}/>
+            </PlusCircleWrapper>
         </HeaderContainer>
     );
 };
