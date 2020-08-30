@@ -4,6 +4,7 @@ import Header from '../layouts/Header';
 import {Box} from 'rebass';
 import SettingSection from '../layouts/SettingSection';
 import TimerSection from '../layouts/TimerSection';
+import TimerControlSection from '../layouts/TimerControlSection';
 
 const Container: React.FC = (props) => (
     <Box
@@ -24,6 +25,8 @@ const MainContainer: React.FC = () => {
             <Container>
                 <SettingSection/>
                 <TimerSection/>
+                <Box marginY={4}/>
+                <TimerControlSection/>
             </Container>
             <Footer/>
         </>

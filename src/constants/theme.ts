@@ -48,7 +48,7 @@ export default {
             fontFamily: 'heading',
             fontWeight: 'heading',
             lineHeight: 'heading',
-            fontSize: [ 5, 6, 7 ],
+            fontSize: [5, 6, 7],
         },
         caps: {
             textTransform: 'uppercase',
@@ -88,17 +88,20 @@ export default {
             fontWeight: 'bold',
             color: 'background',
             bg: 'primary',
+            cursor: 'pointer',
             borderRadius: 'default',
         },
         outline: {
             variant: 'buttons.primary',
             color: 'primary',
             bg: 'transparent',
+            cursor: 'pointer',
             boxShadow: 'inset 0 0 2px',
         },
         secondary: {
             variant: 'buttons.primary',
             color: 'background',
+            cursor: 'pointer',
             bg: 'secondary',
         },
     },
@@ -109,4 +112,4 @@ export default {
             lineHeight: 'body',
         },
     },
-}
+};
