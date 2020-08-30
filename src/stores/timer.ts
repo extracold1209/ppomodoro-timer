@@ -1,63 +1,93 @@
-/*
+import {createAction, createReducer} from '@reduxjs/toolkit';
 
-무엇이 필요한가?
-
-- 시작버튼을 누르면 현재 설정된 타이머가 진행되어야 한다
-- 정지버튼을 누르면 현재 설정된 타이머가 멈춰야 한다.
-- 리셋버튼을 누르면 모든 타이머가 초기화 되고, 인덱스가 0 으로 돌아가야 한다
-
-- 타이머 리스트를 보여줄 수 있어야 한다
-- 타이머의 분초가 변경될때마다 해당 컴포넌트가 렌더될 수 있어야 한다
-
-reducer
-- 타이머리스트
-- 타이머 상태 변경(인덱스, 상태)
-- 타이머 추가
-- 타이머 삭제
-- 타이머 순서 변경(예정)
-
- */
-
-import {createAction, createReducer, PayloadAction} from '@reduxjs/toolkit';
-import {cloneDeep} from 'lodash';
-
-export interface TimerReducer {
-    timers: Timer[];
-    currentSelectedTimerIndex: number;
+export enum TimerStatus {
+    STOPPED, RUNNING
 }
 
-export const addTimer = createAction<Timer>('TIMER/ADDED');
-export const removeTimer = createAction<number>('TIMER/REMOVED');
-export const selectTimer = createAction<number>('TIMER/SELECTED');
-export const changeTimerOrder = createAction<[number, number]>('TIMER/CHANGE_ORDER');
-export const selectTimerIndex = createAction<number>('TIMER/TIMER_SELECTED');
+export enum TimerType {
+    WORK, REST
+}
+
+export interface TimerReducer {
+    currentTomatoCount: number;
+    maxTomatoCount: number;
+    remainTime: number;
+    initialWorkTime: number;
+    initialRestTime: number;
+    status: TimerStatus;
+    currentTimerType: TimerType;
+}
+
+export const increaseTomatoCount = createAction('TIMER/INCREASE_TOMATO');
+export const changeMaxTomatoCount = createAction<number>('TIMER/CHANGE_MAX_TOMATO');
+export const changeInitialWorkTime = createAction<number>('TIMER/CHANGE_WORK_TIME');
+export const changeInitialRestTime = createAction<number>('TIMER/CHANGE_REST_TIME');
+export const changeTimerStatus = createAction<TimerStatus>('TIMER/CHANGE_STATUS');
+export const startTimer = createAction('TIMER/START');
+export const stopTimer = createAction('TIMER/STOP');
+export const resetTimer = createAction('TIMER/RESET');
+export const notifyWorkTimeEnded = createAction('TIMER/WORK_TIME_ENDED');
+export const notifyRestTimeEnded = createAction('TIMER/REST_TIME_ENDED');
 
 const defaultState: TimerReducer = {
-    currentSelectedTimerIndex: 0,
-    timers: [
-        {title: '더미따리1', initialSecond: 10},
-        {title: '더미따리2', initialSecond: 15},
-        {title: '더미따리3', initialSecond: 20},
-        {title: '더미따리4', initialSecond: 25},
-    ],
+    status: TimerStatus.STOPPED,
+    currentTimerType: TimerType.WORK,
+    currentTomatoCount: 0,
+    maxTomatoCount: 10,
+    initialRestTime: 300, // 5 min
+    initialWorkTime: 1500, // 25 min
+    remainTime: 1500, // 25 min, same as initialWorkTime
 };
 
 export default createReducer(defaultState, {
-    [addTimer.type]: (state, {payload}: PayloadAction<Timer>) => {
-        state.timers = [payload, ...state.timers];
+    [startTimer.type]: (state) => {
+        state.status = TimerStatus.RUNNING;
     },
-    [removeTimer.type]: (state, {payload}: PayloadAction<number>) => {
-        state.timers.splice(payload, 1);
+    [stopTimer.type]: (state) => {
+        state.remainTime = state.initialWorkTime;
+        state.currentTimerType = TimerType.WORK;
+        state.status = TimerStatus.STOPPED;
     },
-    [selectTimerIndex.type]: (state, {payload}: PayloadAction<number>) => {
-        state.currentSelectedTimerIndex = payload;
-    },
-    [changeTimerOrder.type]: (state, {payload}: PayloadAction<[number, number]>) => {
-        const [prev, next] = payload;
-        const nextTimers = cloneDeep(state.timers);
-        const tempTimerObject = nextTimers[prev];
-        nextTimers[prev] = nextTimers[next];
-        nextTimers[next] = tempTimerObject;
-        state.timers = nextTimers;
+    [resetTimer.type]: (state) => {
+        state.remainTime = state.initialWorkTime;
+        state.currentTimerType = TimerType.WORK;
+        state.status = TimerStatus.STOPPED;
+        state.currentTomatoCount = 0;
     }
 });
+
+// export const addTimer = createAction<Timer>('TIMER/ADDED');
+// export const removeTimer = createAction<number>('TIMER/REMOVED');
+// export const selectTimer = createAction<number>('TIMER/SELECTED');
+// export const changeTimerOrder = createAction<[number, number]>('TIMER/CHANGE_ORDER');
+// export const selectTimerIndex = createAction<number>('TIMER/TIMER_SELECTED');
+//
+// const defaultState: TimerReducer = {
+//     currentSelectedTimerIndex: 0,
+//     timers: [
+//         {title: '더미따리1', initialSecond: 10},
+//         {title: '더미따리2', initialSecond: 15},
+//         {title: '더미따리3', initialSecond: 20},
+//         {title: '더미따리4', initialSecond: 25},
+//     ],
+// };
+//
+// export default createReducer(defaultState, {
+//     [addTimer.type]: (state, {payload}: PayloadAction<Timer>) => {
+//         state.timers = [payload, ...state.timers];
+//     },
+//     [removeTimer.type]: (state, {payload}: PayloadAction<number>) => {
+//         state.timers.splice(payload, 1);
+//     },
+//     [selectTimerIndex.type]: (state, {payload}: PayloadAction<number>) => {
+//         state.currentSelectedTimerIndex = payload;
+//     },
+//     [changeTimerOrder.type]: (state, {payload}: PayloadAction<[number, number]>) => {
+//         const [prev, next] = payload;
+//         const nextTimers = cloneDeep(state.timers);
+//         const tempTimerObject = nextTimers[prev];
+//         nextTimers[prev] = nextTimers[next];
+//         nextTimers[next] = tempTimerObject;
+//         state.timers = nextTimers;
+//     }
+// });
