@@ -17,7 +17,7 @@ export default (initialSecond: number): [() => void, () => void, number, (newIni
             timeout && clearTimeout(timeout);
             changeSeconds(initialSecond);
         } else {
-            timeout = setTimeout(() => {
+            timeout = window.setTimeout(() => {
                 if (remainSeconds === 0) {
                     clearTimeout(timeout);
                 } else {

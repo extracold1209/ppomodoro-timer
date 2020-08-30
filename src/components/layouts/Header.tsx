@@ -1,22 +1,24 @@
 import React from 'react';
-import styled from 'styled-components';
+import {Box, Flex, Link, Text} from 'rebass';
+import styled from '@emotion/styled';
 
-const HeaderContainer = styled.header`
-    display:flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-    padding: 1rem;
+const HeaderFlexContainer = styled(Flex)`
     background-color: rgb(245, 195, 64);
-    top: 0;
-    left: 0;
-    height: 4vh;
+    align-items: center;
+    margin-bottom: 1rem;
+    height: 10vh;
+    padding: 0 10px;
 `;
 
 const Header: React.FC = () => {
     return (
-        <HeaderContainer>
-            Hello?
-        </HeaderContainer>
+        <HeaderFlexContainer>
+            <Text p={2} fontWeight='bold'>찐붕게이의 인생리셋 타이머</Text>
+            <Box mx='auto'/>
+            <Link variant='nav'>
+                [찐붕]
+            </Link>
+        </HeaderFlexContainer>
     );
 };
 
