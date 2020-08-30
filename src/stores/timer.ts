@@ -28,6 +28,7 @@ export const stopTimer = createAction('TIMER/STOP');
 export const resetTimer = createAction('TIMER/RESET');
 export const notifyWorkTimeEnded = createAction('TIMER/WORK_TIME_ENDED');
 export const notifyRestTimeEnded = createAction('TIMER/REST_TIME_ENDED');
+export const tick = createAction('TIMER/TICK');
 
 const defaultState: TimerReducer = {
     status: TimerStatus.STOPPED,
@@ -69,5 +70,12 @@ export default createReducer(defaultState, {
         state.maxTomatoCount = payload;
         state.status = TimerStatus.STOPPED;
         state.currentTimerType = TimerType.WORK;
-    }
+    },
+    [tick.type]: (state) => {
+        if (state.remainTime > 0) {
+            state.remainTime--;
+        } else {
+            state.status = TimerStatus.STOPPED;
+        }
+    },
 });
