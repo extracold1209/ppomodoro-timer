@@ -1,25 +1,21 @@
 import React from 'react';
+import {Flex} from 'rebass';
 import styled from '@emotion/styled';
 
-const FooterContainer = styled.div`
-    display: flex;
-    //position: fixed;
-    //width: 100%;
+const FooterFlexContainer = styled(Flex)`
+    height: 10vh;
+    background-color: rgb(245, 195, 64);
+    padding: 1rem;
+    margin-top: 1rem;
     justify-content: center;
     align-items: center;
-    margin-top: 1rem;
-    padding: 1rem;
-    background-color: rgb(245, 195, 64);
-    bottom: 0;
-    left: 0;
-    height: 4vh;
 `;
 
 const Footer: React.FC = () => {
     return (
-        <FooterContainer>
+        <FooterFlexContainer>
             하는일이 없어요
-        </FooterContainer>
+        </FooterFlexContainer>
     );
 };
 
