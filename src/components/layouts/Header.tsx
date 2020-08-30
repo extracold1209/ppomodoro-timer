@@ -6,7 +6,7 @@ const HeaderFlexContainer = styled(Flex)`
     background-color: rgb(245, 195, 64);
     align-items: center;
     margin-bottom: 1rem;
-    height: 10vh;
+    height: 52px;
     padding: 0 10px;
 `;
 

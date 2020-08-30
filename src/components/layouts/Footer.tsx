@@ -3,7 +3,10 @@ import {Flex} from 'rebass';
 import styled from '@emotion/styled';
 
 const FooterFlexContainer = styled(Flex)`
-    height: 10vh;
+    width: 100%;
+    bottom: 0;
+    position: fixed;
+    height: 52px;
     background-color: rgb(245, 195, 64);
     padding: 1rem;
     margin-top: 1rem;
