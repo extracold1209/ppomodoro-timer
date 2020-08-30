@@ -6,6 +6,8 @@ import useAudio from '../../hooks/useAudio';
 import {useDrag, useDrop, XYCoord} from 'react-dnd';
 import {changeTimerOrder} from '../../stores/timer';
 import {useDispatch} from 'react-redux';
+import useModal from '../../hooks/useModal';
+import CardSettingModal from '../layouts/CardSettingModal';
 
 const CardContainer = styled.div`
     width: 100%;
@@ -55,6 +57,7 @@ type DragItem = {
 const FlattenCard: React.FC<{ timer: Timer, onDelete?: () => void, index?: number }> = (props) => {
     const ref = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
+    const Foofoo = useModal({component: CardSettingModal});
     const {timer, index, onDelete} = props;
     const {title, initialSecond} = timer;
 
@@ -144,6 +147,7 @@ const FlattenCard: React.FC<{ timer: Timer, onDelete?: () => void, index?: numbe
     drag(drop(ref));
     return (
             <CardContainer ref={ref}>
+                <Foofoo/>
                 <HeaderContainer>
                     <HeaderTitleContainer>
                         {title || '타이틀이 없어욧'}
