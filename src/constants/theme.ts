@@ -35,7 +35,7 @@ export default {
         circle: 99999,
     },
     shadows: {
-        card: '0 0 4px rgba(0, 0, 0, .125)',
+        card: '5px 7px 15px 0px rgba(189,189,189,1)',
     },
     // rebass variants
     text: {
@@ -64,6 +64,7 @@ export default {
         card: {
             p: 2,
             bg: 'background',
+            borderRadius: 4,
             boxShadow: 'card',
         },
         link: {

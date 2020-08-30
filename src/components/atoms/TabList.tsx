@@ -15,7 +15,7 @@ const ItemTab = styled<typeof Box, {
     selectBackground: string;
 }>(Box)`
     cursor: pointer;
-    margin: 0 4px;
+    margin: 0;
     padding: 12px;
     background-color: ${({isActivate, selectBackground}) => isActivate ? selectBackground : 'transparent'};
     color: ${({isActivate}) => isActivate ? 'white' : 'black'};

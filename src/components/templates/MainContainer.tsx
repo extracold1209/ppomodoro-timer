@@ -1,7 +1,20 @@
 import React from 'react';
-import {Container, Row} from 'react-grid-system';
 import Footer from '../layouts/Footer';
 import Header from '../layouts/Header';
+import {Box} from 'rebass';
+import SettingSection from '../layouts/SettingSection';
+import TimerSection from '../layouts/TimerSection';
+
+const Container: React.FC = (props) => (
+    <Box
+        sx={{
+            maxWidth: 1024,
+            mx: 'auto',
+            px: 3,
+        }}>
+        {props.children}
+    </Box>
+);
 
 const MainContainer: React.FC = () => {
 
@@ -9,9 +22,8 @@ const MainContainer: React.FC = () => {
         <>
             <Header/>
             <Container>
-                <Row>
-                    메인컨테이너
-                </Row>
+                <SettingSection/>
+                <TimerSection/>
             </Container>
             <Footer/>
         </>

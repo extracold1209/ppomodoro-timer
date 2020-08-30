@@ -5,11 +5,11 @@ import {Input, Label} from '@rebass/forms';
 import styled from '@emotion/styled';
 
 const TabViewCard = styled(Card)`
-    margin: 8px 4px 0;
+    margin: 8px 0 16px;
 `;
 
 const InlineLabel = styled(Label)`
-    display: inline;
+    display: inline; // css 적용 순서상 component property 가 먹지 않음
 `;
 
 const TimeSettingInput: React.FC<{ name: string; suffix?: string; defaultValue?: number }> = (
