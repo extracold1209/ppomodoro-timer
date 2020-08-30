@@ -32,7 +32,7 @@ export const notifyRestTimeEnded = createAction('TIMER/REST_TIME_ENDED');
 const defaultState: TimerReducer = {
     status: TimerStatus.STOPPED,
     currentTimerType: TimerType.WORK,
-    currentTomatoCount: 0,
+    currentTomatoCount: 1,
     maxTomatoCount: 10,
     initialRestTime: 300, // 5 min
     initialWorkTime: 1500, // 25 min
