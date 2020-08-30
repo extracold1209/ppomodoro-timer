@@ -39,7 +39,11 @@ const TimerSection: React.FC = () => {
                 color={'grey'}
                 fontSize={1}
             >
-                {`${currentTomato} / ${maxTomato} 번째 뽀모도로..`}
+                {
+                    currentTomato === maxTomato
+                        ? '마지막 뽀모도로 !!'
+                        : `${currentTomato} / ${maxTomato} 번째 뽀모도로..`
+                }
             </Box>
             <Flex
                 padding={4}

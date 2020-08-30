@@ -1,8 +1,12 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {ChangeEvent, useCallback, useMemo, useState} from 'react';
 import TabList from '../atoms/TabList';
 import {Box, Card} from 'rebass';
 import {Input, Label} from '@rebass/forms';
 import styled from '@emotion/styled';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../stores';
+import {changeInitialRestTime, changeInitialWorkTime, changeMaxTomatoCount} from '../../stores/timer';
+import {createSelector} from '@reduxjs/toolkit';
 
 const TabViewCard = styled(Card)`
     margin: 8px 0 16px;
@@ -12,8 +16,8 @@ const InlineLabel = styled(Label)`
     display: inline; // css 적용 순서상 component property 가 먹지 않음
 `;
 
-const TimeSettingInput: React.FC<{ name: string; suffix?: string; defaultValue?: number }> = (
-    {name, defaultValue, suffix}
+const TimeSettingInput: React.FC<{ name: string; suffix?: string; value: number, onChange?: (e: ChangeEvent<HTMLInputElement>) => void }> = (
+    {name, value, suffix, onChange}
 ) => (
     <Box
         marginBottom={1}
@@ -26,7 +30,9 @@ const TimeSettingInput: React.FC<{ name: string; suffix?: string; defaultValue?:
         <Input
             id={`${name}-input`}
             type='number'
-            defaultValue={defaultValue || 0}
+            min={1}
+            value={value}
+            onChange={onChange}
             paddingRight={1}
             marginRight={2}
             width={'fit-content'}
@@ -36,25 +42,65 @@ const TimeSettingInput: React.FC<{ name: string; suffix?: string; defaultValue?:
     </Box>
 );
 
-const TimeSetting: React.FC = () => (
-    <TabViewCard>
-        <TimeSettingInput
-            name='집중시간'
-            defaultValue={25}
-            suffix='분'
-        />
-        <TimeSettingInput
-            name='휴식시간'
-            defaultValue={5}
-            suffix='분'
-        />
-        <TimeSettingInput
-            name='반복횟수'
-            defaultValue={5}
-            suffix='번'
-        />
-    </TabViewCard>
+const workTimeReSelector = createSelector<RootState, number, number>(
+    (state) => state.timer.initialWorkTime,
+    (workTimeSecond) => Math.floor(workTimeSecond / 60)
 );
+
+const restTimeReSelector = createSelector<RootState, number, number>(
+    (state) => state.timer.initialRestTime,
+    (workTimeSecond) => Math.floor(workTimeSecond / 60)
+);
+
+const TimeSetting: React.FC = () => {
+    const dispatch = useDispatch();
+    const workTime = useSelector(workTimeReSelector);
+    const restTime = useSelector(restTimeReSelector);
+    const tomatoCount = useSelector<RootState, number>((state) => state.timer.maxTomatoCount);
+
+    const handleInputChange = useCallback((type: 'WORK' | 'REST' | 'TOMATO_COUNT') => (e: ChangeEvent<HTMLInputElement>) => {
+        const nextValue = parseInt(e.target.value);
+
+        if (Number.isNaN(nextValue) || nextValue <= 0) {
+            return;
+        }
+        switch (type) {
+            case 'WORK':
+                dispatch(changeInitialWorkTime(nextValue * 60));
+                break;
+            case 'REST':
+                dispatch(changeInitialRestTime(nextValue * 60));
+                break;
+            case 'TOMATO_COUNT':
+                dispatch(changeMaxTomatoCount(nextValue));
+                break;
+        }
+    }, []);
+
+
+    return (
+        <TabViewCard>
+            <TimeSettingInput
+                name='집중시간'
+                value={workTime}
+                onChange={handleInputChange('WORK')}
+                suffix='분'
+            />
+            <TimeSettingInput
+                name='휴식시간'
+                value={restTime}
+                onChange={handleInputChange('REST')}
+                suffix='분'
+            />
+            <TimeSettingInput
+                name='반복횟수'
+                value={tomatoCount}
+                onChange={handleInputChange('TOMATO_COUNT')}
+                suffix='번'
+            />
+        </TabViewCard>
+    );
+};
 
 const CommonSetting: React.FC = () => (<TabViewCard>기타세팅은 추후에..</TabViewCard>);
 
