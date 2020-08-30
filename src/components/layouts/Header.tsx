@@ -1,8 +1,5 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {BiPlusCircle} from 'react-icons/bi';
-import {useDispatch} from 'react-redux';
-import {addTimer} from '../../stores/timer';
 
 const HeaderContainer = styled.header`
     display:flex;
@@ -15,26 +12,10 @@ const HeaderContainer = styled.header`
     height: 4vh;
 `;
 
-const PlusCircleWrapper = styled.div`
-    cursor: pointer;
-    display: flex;
-    position: absolute;
-    right: 10px;
-`;
-
 const Header: React.FC = () => {
-    const dispatch = useDispatch();
-
-    const handleCircleClicked = useCallback(() => {
-        dispatch(addTimer({title: '아무거나', initialSecond: parseInt((Math.random() * 100).toFixed(0))}));
-    }, []);
-
     return (
         <HeaderContainer>
             Hello?
-            <PlusCircleWrapper onClick={handleCircleClicked}>
-                <BiPlusCircle size={24}/>
-            </PlusCircleWrapper>
         </HeaderContainer>
     );
 };

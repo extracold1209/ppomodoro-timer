@@ -1,7 +1,5 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import Button from '../atoms/Button';
-import {useDispatch} from 'react-redux';
 
 const FooterContainer = styled.div`
     display: flex;
