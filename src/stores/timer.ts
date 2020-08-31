@@ -33,7 +33,7 @@ export const tick = createAction('TIMER/TICK');
 const defaultState: TimerReducer = {
     status: TimerStatus.STOPPED,
     currentTimerType: TimerType.WORK,
-    currentTomatoCount: 1,
+    currentTomatoCount: 0,
     maxTomatoCount: 10,
     initialRestTime: 300, // 5 min
     initialWorkTime: 1500, // 25 min
@@ -43,6 +43,7 @@ const defaultState: TimerReducer = {
 export default createReducer(defaultState, {
     [startTimer.type]: (state) => {
         state.status = TimerStatus.RUNNING;
+        state.currentTomatoCount++;
     },
     [stopTimer.type]: (state) => {
         state.remainTime = state.initialWorkTime;
@@ -53,7 +54,7 @@ export default createReducer(defaultState, {
         state.remainTime = state.initialWorkTime;
         state.currentTimerType = TimerType.WORK;
         state.status = TimerStatus.STOPPED;
-        state.currentTomatoCount = 1;
+        state.currentTomatoCount = 0;
     },
     [changeInitialWorkTime.type]: (state, {payload}: PayloadAction<number>) => {
         state.initialWorkTime = payload;

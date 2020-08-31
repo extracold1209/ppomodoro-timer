@@ -13,6 +13,7 @@ const NoFocusButton = styled(Button)`
 
 const TimerControlSection: React.FC = () => {
     const timerStatus = useSelector<RootState, TimerStatus>((state) => state.timer.status);
+    const currentTomatoCount = useSelector<RootState, number>((state) => state.timer.currentTomatoCount);
     const dispatch = useDispatch();
 
     const handleButtonClicked = useCallback((buttonType: 'START' | 'STOP' | 'RESET') => () => {
@@ -27,14 +28,29 @@ const TimerControlSection: React.FC = () => {
 
     const buttonList = useMemo(() => {
         if (timerStatus === TimerStatus.STOPPED) {
-            return <NoFocusButton variant='primary' onClick={handleButtonClicked('START')}>시작</NoFocusButton>;
-        } else if (timerStatus === TimerStatus.RUNNING) {
             return (
                 <>
-                    <NoFocusButton variant='secondary' onClick={handleButtonClicked('STOP')}
-                                   marginRight={2}>정지</NoFocusButton>
-                    <NoFocusButton variant='outline' onClick={handleButtonClicked('RESET')}>초기화</NoFocusButton>
+                    <NoFocusButton
+                        variant='primary'
+                        onClick={handleButtonClicked('START')}
+                        marginRight={2}
+                    >
+                        시작
+                    </NoFocusButton>
+                    {
+                        currentTomatoCount > 0 &&
+                        <NoFocusButton variant='outline' onClick={handleButtonClicked('RESET')}>초기화</NoFocusButton>
+                    }
                 </>
+            );
+        } else if (timerStatus === TimerStatus.RUNNING) {
+            return (
+                <NoFocusButton
+                    variant='secondary'
+                    onClick={handleButtonClicked('STOP')}
+                >
+                    정지
+                </NoFocusButton>
             );
         }
     }, [timerStatus]);

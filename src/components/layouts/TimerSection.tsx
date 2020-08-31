@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Box, Card, Flex} from 'rebass';
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
@@ -32,6 +32,16 @@ const TimerSection: React.FC = () => {
     const currentTomato = useSelector<RootState, number>((state) => state.timer.currentTomatoCount);
     const maxTomato = useSelector<RootState, number>((state) => state.timer.maxTomatoCount);
 
+    const tomatoCountNotiText = useMemo(() => {
+        if (currentTomato === 0) {
+            return '';
+        } else if (currentTomato === maxTomato) {
+            return '마지막 뽀모도로 !!';
+        } else {
+            return `${currentTomato} / ${maxTomato} 번째 뽀모도로..`;
+        }
+    }, [currentTomato, maxTomato]);
+
     return (
         <Card>
             <Box
@@ -39,11 +49,7 @@ const TimerSection: React.FC = () => {
                 color={'grey'}
                 fontSize={1}
             >
-                {
-                    currentTomato === maxTomato
-                        ? '마지막 뽀모도로 !!'
-                        : `${currentTomato} / ${maxTomato} 번째 뽀모도로..`
-                }
+                {tomatoCountNotiText}
             </Box>
             <Flex
                 padding={4}
