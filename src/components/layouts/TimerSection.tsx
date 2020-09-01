@@ -21,6 +21,7 @@ const timerTypeReSelector = createSelector<RootState, TimerType, string>(
         } else if (currentType === TimerType.REST) {
             return '휴식시간';
         } else {
+            // must be unreachable
             return '환상의 똥꼬쑈 타임';
         }
     }
