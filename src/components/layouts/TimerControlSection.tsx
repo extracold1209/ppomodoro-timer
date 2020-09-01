@@ -14,6 +14,7 @@ const NoFocusButton = styled(Button)`
 const TimerControlSection: React.FC = () => {
     const timerStatus = useSelector<RootState, TimerStatus>((state) => state.timer.status);
     const currentTomatoCount = useSelector<RootState, number>((state) => state.timer.currentTomatoCount);
+    const maxTomatoCount = useSelector<RootState, number>((state) => state.timer.maxTomatoCount);
     const dispatch = useDispatch();
 
     const handleButtonClicked = useCallback((buttonType: 'START' | 'STOP' | 'RESET') => () => {
@@ -30,13 +31,16 @@ const TimerControlSection: React.FC = () => {
         if (timerStatus === TimerStatus.STOPPED) {
             return (
                 <>
-                    <NoFocusButton
-                        variant='primary'
-                        onClick={handleButtonClicked('START')}
-                        marginRight={2}
-                    >
-                        시작
-                    </NoFocusButton>
+                    {
+                        currentTomatoCount < maxTomatoCount &&
+                        <NoFocusButton
+                            variant='primary'
+                            onClick={handleButtonClicked('START')}
+                            marginRight={2}
+                        >
+                            시작
+                        </NoFocusButton>
+                    }
                     {
                         currentTomatoCount > 0 &&
                         <NoFocusButton variant='outline' onClick={handleButtonClicked('RESET')}>초기화</NoFocusButton>
@@ -53,7 +57,7 @@ const TimerControlSection: React.FC = () => {
                 </NoFocusButton>
             );
         }
-    }, [timerStatus]);
+    }, [timerStatus, currentTomatoCount, maxTomatoCount]);
 
     return (
         <Flex justifyContent='center'>
