@@ -1,4 +1,4 @@
-import {createAction, createReducer, PayloadAction} from '@reduxjs/toolkit';
+import {createAction, createReducer, Draft, PayloadAction} from '@reduxjs/toolkit';
 
 export enum TimerStatus {
     STOPPED, RUNNING
@@ -39,20 +39,28 @@ const defaultState: TimerReducer = {
     remainTime: 1500, // 25 min, same as initialWorkTime
 };
 
+function resetTimerStateByType(state: Draft<TimerReducer>, timerType: TimerType) {
+    if (timerType === TimerType.WORK) {
+        state.remainTime = state.initialWorkTime;
+        state.currentTimerType = TimerType.WORK;
+    } else if (timerType === TimerType.REST) {
+        state.remainTime = state.initialRestTime;
+        state.currentTimerType = TimerType.REST;
+    }
+
+    state.status = TimerStatus.STOPPED;
+}
+
 export default createReducer(defaultState, {
     [startTimer.type]: (state) => {
         state.status = TimerStatus.RUNNING;
         state.currentTomatoCount++;
     },
     [suspendTimer.type]: (state) => {
-        state.remainTime = state.initialWorkTime;
-        state.currentTimerType = TimerType.WORK;
-        state.status = TimerStatus.STOPPED;
+        resetTimerStateByType(state, TimerType.WORK);
     },
     [resetTimer.type]: (state) => {
-        state.remainTime = state.initialWorkTime;
-        state.currentTimerType = TimerType.WORK;
-        state.status = TimerStatus.STOPPED;
+        resetTimerStateByType(state, TimerType.WORK);
         state.currentTomatoCount = 0;
     },
     [changeInitialWorkTime.type]: (state, {payload}: PayloadAction<number>) => {
@@ -80,13 +88,9 @@ export default createReducer(defaultState, {
     },
     [endTimer.type]: (state) => {
         if (state.currentTimerType === TimerType.WORK) {
-            state.currentTimerType = TimerType.REST;
-            state.remainTime = state.initialRestTime;
-            state.status = TimerStatus.STOPPED; // TODO, 세팅에 따라 자동실행이 될 수도 있어야 한다
+            resetTimerStateByType(state, TimerType.REST);
         } else if (state.currentTimerType === TimerType.REST) {
-            state.currentTimerType = TimerType.WORK;
-            state.remainTime = state.initialWorkTime;
-            state.status = TimerStatus.STOPPED; // TODO, 세팅에 따라 자동실행이 될 수도 있어야 한다
+            resetTimerStateByType(state, TimerType.WORK);
         }
     },
 });
