@@ -22,6 +22,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "prefer-const": "warn",
         "react/prop-types": "off",
         "quotes": [
             "error",

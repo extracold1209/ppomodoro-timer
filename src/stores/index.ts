@@ -1,9 +1,9 @@
-import {configureStore, EnhancedStore} from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import common from './common';
 import timer from './timer';
 import timerMiddleware from '../middlewares/timerMiddleware';
 
-const store: EnhancedStore = configureStore({
+const store = configureStore({
     reducer: {
         common, timer
     },
