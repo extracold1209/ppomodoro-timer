@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import {Button, Flex} from 'rebass';
-import {resetTimer, startTimer, stopTimer, TimerStatus} from '../../stores/timer';
+import {resetTimer, startTimer, suspendTimer, TimerStatus} from '../../stores/timer';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../stores';
 import styled from '@emotion/styled';
@@ -21,7 +21,7 @@ const TimerControlSection: React.FC = () => {
         if (buttonType === 'START') {
             dispatch(startTimer());
         } else if (buttonType === 'STOP') {
-            dispatch(stopTimer());
+            dispatch(suspendTimer());
         } else if (buttonType === 'RESET') {
             dispatch(resetTimer());
         }

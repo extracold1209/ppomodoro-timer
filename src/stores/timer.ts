@@ -24,9 +24,9 @@ export const changeInitialWorkTime = createAction<number>('TIMER/CHANGE_WORK_TIM
 export const changeInitialRestTime = createAction<number>('TIMER/CHANGE_REST_TIME');
 export const changeTimerStatus = createAction<TimerStatus>('TIMER/CHANGE_STATUS');
 export const startTimer = createAction('TIMER/START');
-export const stopTimer = createAction('TIMER/STOP');
+export const suspendTimer = createAction('TIMER/STOP');
 export const resetTimer = createAction('TIMER/RESET');
-export const notifyTimeEnded = createAction('TIMER/TIME_ENDED');
+export const endTimer = createAction('TIMER/TIME_ENDED');
 export const tick = createAction('TIMER/TICK');
 
 const defaultState: TimerReducer = {
@@ -44,7 +44,7 @@ export default createReducer(defaultState, {
         state.status = TimerStatus.RUNNING;
         state.currentTomatoCount++;
     },
-    [stopTimer.type]: (state) => {
+    [suspendTimer.type]: (state) => {
         state.remainTime = state.initialWorkTime;
         state.currentTimerType = TimerType.WORK;
         state.status = TimerStatus.STOPPED;
@@ -78,7 +78,7 @@ export default createReducer(defaultState, {
             state.status = TimerStatus.STOPPED;
         }
     },
-    [notifyTimeEnded.type]: (state) => {
+    [endTimer.type]: (state) => {
         if (state.currentTimerType === TimerType.WORK) {
             state.currentTimerType = TimerType.REST;
             state.remainTime = state.initialRestTime;
