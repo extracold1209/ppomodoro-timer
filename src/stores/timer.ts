@@ -26,8 +26,7 @@ export const changeTimerStatus = createAction<TimerStatus>('TIMER/CHANGE_STATUS'
 export const startTimer = createAction('TIMER/START');
 export const stopTimer = createAction('TIMER/STOP');
 export const resetTimer = createAction('TIMER/RESET');
-export const notifyWorkTimeEnded = createAction('TIMER/WORK_TIME_ENDED');
-export const notifyRestTimeEnded = createAction('TIMER/REST_TIME_ENDED');
+export const notifyTimeEnded = createAction('TIMER/TIME_ENDED');
 export const tick = createAction('TIMER/TICK');
 
 const defaultState: TimerReducer = {
@@ -77,6 +76,17 @@ export default createReducer(defaultState, {
             state.remainTime--;
         } else {
             state.status = TimerStatus.STOPPED;
+        }
+    },
+    [notifyTimeEnded.type]: (state) => {
+        if (state.currentTimerType === TimerType.WORK) {
+            state.currentTimerType = TimerType.REST;
+            state.remainTime = state.initialRestTime;
+            state.status = TimerStatus.STOPPED; // TODO, 세팅에 따라 자동실행이 될 수도 있어야 한다
+        } else if (state.currentTimerType === TimerType.REST) {
+            state.currentTimerType = TimerType.WORK;
+            state.remainTime = state.initialWorkTime;
+            state.status = TimerStatus.STOPPED; // TODO, 세팅에 따라 자동실행이 될 수도 있어야 한다
         }
     },
 });
