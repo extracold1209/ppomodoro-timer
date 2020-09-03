@@ -43,7 +43,15 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         tickInterval = undefined;
     }
 
-    // if remainTime is 0
+    // end timer when pending time
+    if (timerState.remainTime === 0 && action.type === endTimer.type) {
+        clearTimeout(nextPhaseTimeout);
+        audioController.pause();
+        next(action);
+        return;
+    }
+
+    // handle when remainTime is 0
     if (timerState.remainTime === 1 && action.type !== suspendTimer.type) {
         if (timerState.currentTimerType === TimerType.WORK) {
             await audioController.play(timerState.workTimeSound);
@@ -59,7 +67,7 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         if (timerState.autoNextPhaseTime) {
             nextPhaseTimeout = setTimeout(() => {
                 next(endTimer());
-            }, 5000);
+            }, timerState.autoNextPhaseTime);
         } else {
             next(endTimer());
         }

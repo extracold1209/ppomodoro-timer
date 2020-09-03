@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import {Button, Flex} from 'rebass';
-import {resetTimer, startTimer, suspendTimer, TimerStatus, TimerType} from '../../stores/timer';
+import {endTimer, resetTimer, startTimer, suspendTimer, TimerStatus, TimerType} from '../../stores/timer';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../stores';
 import styled from '@emotion/styled';
@@ -18,13 +18,15 @@ const TimerControlSection: React.FC = () => {
     const maxTomatoCount = useSelector<RootState, number>((state) => state.timer.maxTomatoCount);
     const dispatch = useDispatch();
 
-    const handleButtonClicked = useCallback((buttonType: 'START' | 'STOP' | 'RESET') => () => {
+    const handleButtonClicked = useCallback((buttonType: 'START' | 'STOP' | 'RESET' | 'PENDING') => () => {
         if (buttonType === 'START') {
             dispatch(startTimer());
         } else if (buttonType === 'STOP') {
             dispatch(suspendTimer());
         } else if (buttonType === 'RESET') {
             dispatch(resetTimer());
+        } else if (buttonType === 'PENDING') {
+            dispatch(endTimer());
         }
     }, []);
 
@@ -69,7 +71,12 @@ const TimerControlSection: React.FC = () => {
             );
         } else if (timerStatus === TimerStatus.PENDING) {
             return (
-                <div>펜딩맨</div>
+                <NoFocusButton
+                    variant='secondary'
+                    onClick={handleButtonClicked('PENDING')}
+                >
+                    다음
+                </NoFocusButton>
             );
         }
     }, [timerStatus, currentTomatoCount, maxTomatoCount]);

@@ -1,5 +1,6 @@
 class AudioController {
     private dataSource!: string;
+    private currentPlayingSound?: string;
     private audioSourceMap: {[soundName: string]: HTMLAudioElement} = {};
 
     constructor(dataSource: string) {
@@ -23,7 +24,21 @@ class AudioController {
     }
 
     async play(src: string) {
+        this.pause();
+
+        this.currentPlayingSound = src;
         await this.audioSourceMap[src].play();
+    }
+
+    pause(src?: string) {
+        const target =
+            (src && this.audioSourceMap[src]) ||
+            (this.currentPlayingSound && this.audioSourceMap[this.currentPlayingSound]);
+
+        if (target) {
+            target.pause();
+            target.currentTime = 0;
+        }
     }
 }
 
