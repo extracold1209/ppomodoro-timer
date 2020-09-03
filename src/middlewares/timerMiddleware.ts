@@ -13,6 +13,7 @@ import {RootState} from '../stores';
 
 const audioController = new AudioController('/public/sounds/');
 let tickInterval: number | undefined;
+let nextPhaseTimeout: number | undefined;
 const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatch, RootState>) => (next) => async (action: PayloadAction) => {
     const rootState = getState();
     const timerState = rootState.timer;
@@ -26,10 +27,14 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
     }
 
     // tick start
-    if (action.type === startTimer.type && !tickInterval) {
-        tickInterval = setInterval(() => {
-            tickInterval && dispatch(tick());
-        }, 1000);
+    if (action.type === startTimer.type) {
+        clearTimeout(nextPhaseTimeout);
+
+        if (!tickInterval) {
+            tickInterval = setInterval(() => {
+                tickInterval && dispatch(tick());
+            }, 1000);
+        }
     }
 
     // suspend tick
@@ -48,7 +53,11 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
     } else if (timerState.remainTime === 0) {
         clearInterval(tickInterval);
         tickInterval = undefined;
-        next(endTimer());
+
+        //NOTE if 5000 variable is undefined or 0, entTimer immediately
+        nextPhaseTimeout = setTimeout(() => {
+            next(endTimer());
+        }, 5000);
         return;
     }
 
