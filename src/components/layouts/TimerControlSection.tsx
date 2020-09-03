@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import {Button, Flex} from 'rebass';
-import {resetTimer, startTimer, suspendTimer, TimerStatus} from '../../stores/timer';
+import {resetTimer, startTimer, suspendTimer, TimerStatus, TimerType} from '../../stores/timer';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../stores';
 import styled from '@emotion/styled';
@@ -13,6 +13,7 @@ const NoFocusButton = styled(Button)`
 
 const TimerControlSection: React.FC = () => {
     const timerStatus = useSelector<RootState, TimerStatus>((state) => state.timer.status);
+    const currentTimerType = useSelector<RootState, TimerType>((state) => state.timer.currentTimerType);
     const currentTomatoCount = useSelector<RootState, number>((state) => state.timer.currentTomatoCount);
     const maxTomatoCount = useSelector<RootState, number>((state) => state.timer.maxTomatoCount);
     const dispatch = useDispatch();
@@ -27,6 +28,22 @@ const TimerControlSection: React.FC = () => {
         }
     }, []);
 
+    const {startButtonText, startButtonVariant} = useMemo(() => {
+        if (currentTimerType === TimerType.WORK) {
+            return {
+                startButtonText: '시작',
+                startButtonVariant: 'primary'
+            };
+        } else if (currentTimerType === TimerType.REST) {
+            return {
+                startButtonText: '다음',
+                startButtonVariant: 'secondary'
+            };
+        } else {
+            throw new Error();
+        }
+    }, [currentTimerType]);
+
     const buttonList = useMemo(() => {
         if (timerStatus === TimerStatus.STOPPED) {
             return (
@@ -34,11 +51,11 @@ const TimerControlSection: React.FC = () => {
                     {
                         currentTomatoCount < maxTomatoCount &&
                         <NoFocusButton
-                            variant='primary'
+                            variant={startButtonVariant}
                             onClick={handleButtonClicked('START')}
                             marginRight={currentTomatoCount > 0 ? 2 : 0}
                         >
-                            시작
+                            {startButtonText}
                         </NoFocusButton>
                     }
                     {

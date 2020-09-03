@@ -22,7 +22,7 @@ const timerTextReSelector = createSelector<RootState, number, { minute: string, 
         const second = time % 60;
 
         return {
-            minute: (minute / 10 === 0) ? '0' + minute : minute + '',
+            minute: (minute < 10) ? '0' + minute : minute + '',
             second: (second < 10) ? '0' + second : second + '',
         };
     },

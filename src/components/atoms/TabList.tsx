@@ -6,8 +6,7 @@ import {DefaultTheme} from '../../constants/theme';
 type Props = {
     listItems: string[];
     onClick?: (item: string, activated: boolean) => void;
-    hoverBackground?: string;
-    selectBackground?: string;
+    disabled: boolean;
 }
 
 const ItemTab = styled<typeof Button, {
@@ -32,7 +31,7 @@ const ItemTab = styled<typeof Button, {
     }
 `;
 
-const TabList: React.FC<Props> = ({listItems, onClick}) => {
+const TabList: React.FC<Props> = ({listItems, onClick, disabled}) => {
     const [currentSelected, setCurrentSelected] = useState<string | undefined>(undefined);
     const handleTabClicked = useCallback((item: string) => () => {
         // 만약 이미 선택된 탭을 다시 누르면 deactivate 된다.
@@ -53,6 +52,7 @@ const TabList: React.FC<Props> = ({listItems, onClick}) => {
                         key={item}
                         onClick={handleTabClicked(item)}
                         isActivate={item === currentSelected}
+                        disabled={disabled}
                     >
                         {item}
                     </ItemTab>

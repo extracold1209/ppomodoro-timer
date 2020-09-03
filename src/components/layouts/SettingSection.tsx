@@ -5,7 +5,7 @@ import {Input, Label} from '@rebass/forms';
 import styled from '@emotion/styled';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../stores';
-import {changeInitialRestTime, changeInitialWorkTime, changeMaxTomatoCount} from '../../stores/timer';
+import {changeInitialRestTime, changeInitialWorkTime, changeMaxTomatoCount, TimerStatus} from '../../stores/timer';
 import {createSelector} from '@reduxjs/toolkit';
 
 const TabViewCard = styled(Card)`
@@ -106,6 +106,7 @@ const CommonSetting: React.FC = () => (<TabViewCard>기타세팅은 추후에..<
 
 const SettingSection: React.FC = () => {
     const [currentShowingTabName, setShowingTab] = useState<string | undefined>(undefined);
+    const currentTimerStatus = useSelector<RootState, TimerStatus>((state) => state.timer.status);
 
     const handleTabSelected = useCallback((item: string, activated: boolean) => {
         setShowingTab(activated ? item : undefined);
@@ -127,6 +128,7 @@ const SettingSection: React.FC = () => {
             <TabList
                 listItems={['시간설정', '기타설정']}
                 onClick={handleTabSelected}
+                disabled={currentTimerStatus === TimerStatus.RUNNING}
             />
             {CurrentTabView}
         </>

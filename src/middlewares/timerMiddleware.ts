@@ -39,7 +39,7 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
     }
 
     // if remainTime is 0
-    if (timerState.remainTime === 1) {
+    if (timerState.remainTime === 1 && action.type !== suspendTimer.type) {
         if (timerState.currentTimerType === TimerType.WORK) {
             await audioController.play(timerState.workTimeSound);
         } else {
@@ -49,6 +49,7 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         clearInterval(tickInterval);
         tickInterval = undefined;
         next(endTimer());
+        return;
     }
 
     next(action);
