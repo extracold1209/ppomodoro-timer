@@ -1,13 +1,20 @@
-// @rebass/preset theme
-export default {
+import palette from './materialPalette';
+
+/**
+ * from @rebass/preset theme
+ * light,dark color pick : https://material.io/resources/color
+ */
+const theme = {
     colors: {
+        primary: palette.deeporange.a200,
+        primaryLight: '#ffa06d',
+        primaryDark: '#c53d13',
+        secondary: palette.teal.a700,
+        secondaryLight: '#5df2d6',
+        secondaryDark: '#008e76',
+        highlight: 'hsla(205, 100%, 40%, 0.125)',
         text: '#000',
         background: '#fff',
-        primary: '#07c',
-        secondary: '#30c',
-        muted: '#f6f6f9',
-        gray: '#dddddf',
-        highlight: 'hsla(205, 100%, 40%, 0.125)',
     },
     fonts: {
         body: 'system-ui, sans-serif',
@@ -95,7 +102,6 @@ export default {
             variant: 'buttons.primary',
             color: 'primary',
             bg: 'transparent',
-            cursor: 'pointer',
             boxShadow: 'inset 0 0 2px',
         },
         secondary: {
@@ -104,6 +110,10 @@ export default {
             cursor: 'pointer',
             bg: 'secondary',
         },
+        secondaryDark: {
+            variant: 'buttons.secondary',
+            bg: 'secondaryDark'
+        }
     },
     styles: {
         root: {
@@ -113,3 +123,6 @@ export default {
         },
     },
 };
+
+export type DefaultTheme =  typeof theme;
+export default theme;
