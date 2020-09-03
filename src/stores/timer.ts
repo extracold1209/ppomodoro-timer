@@ -18,6 +18,7 @@ export interface TimerReducer {
     initialRestTime: number;
     status: TimerStatus;
     currentTimerType: TimerType;
+    autoNextPhaseTime: number;
 }
 
 export const increaseTomatoCount = createAction('TIMER/INCREASE_TOMATO');
@@ -41,6 +42,7 @@ const defaultState: TimerReducer = {
     initialRestTime: 5, // 5 min
     initialWorkTime: 5, // 25 min
     remainTime: 5, // 25 min, same as initialWorkTime
+    autoNextPhaseTime: 5, // if 0, show next phase immediately
 };
 
 function resetTimerStateByType(state: Draft<TimerReducer>, timerType: TimerType) {

@@ -55,9 +55,13 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         tickInterval = undefined;
 
         //NOTE if 5000 variable is undefined or 0, entTimer immediately
-        nextPhaseTimeout = setTimeout(() => {
+        if (timerState.autoNextPhaseTime) {
+            nextPhaseTimeout = setTimeout(() => {
+                next(endTimer());
+            }, 5000);
+        } else {
             next(endTimer());
-        }, 5000);
+        }
         return;
     }
 
