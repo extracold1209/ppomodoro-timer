@@ -4,13 +4,28 @@ import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
 import {useSelector} from 'react-redux';
 import {TimerType} from '../../stores/timer';
+import styled from '@emotion/styled';
 
-const timerTextReSelector = createSelector<RootState, number, { minute: number, second: number }>(
+const TimerWrapper = styled(Flex)`
+    font-family: Concert One, cursive;
+    user-select: none;
+`;
+
+const TimerTypeWrapper = styled(Flex)`
+    user-select: none;
+`;
+
+const timerTextReSelector = createSelector<RootState, number, { minute: string, second: string }>(
     (state) => state.timer.remainTime,
-    (time) => ({
-        minute: Math.floor(time / 60),
-        second: time % 60,
-    }),
+    (time) => {
+        const minute = Math.floor(time / 60);
+        const second = time % 60;
+
+        return {
+            minute: (minute / 10 === 0) ? '0' + minute : minute + '',
+            second: (second < 10) ? '0' + second : second + '',
+        };
+    },
 );
 
 const timerTypeReSelector = createSelector<RootState, TimerType, string>(
@@ -58,16 +73,17 @@ const TimerSection: React.FC = () => {
                 alignItems={'center'}
                 flexDirection={'column'}
             >
-                <Flex
+                <TimerTypeWrapper
                     fontSize={3}
                 >
                     지금은 {timerTypeText} !
-                </Flex>
-                <Flex
+                </TimerTypeWrapper>
+                <TimerWrapper
                     fontSize={6}
+                    marginTop={2}
                 >
-                    {minute}분 {second}초
-                </Flex>
+                    {minute}:{second}
+                </TimerWrapper>
             </Flex>
         </Card>
     );
