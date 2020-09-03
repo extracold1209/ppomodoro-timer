@@ -18,7 +18,8 @@ export interface TimerReducer {
     initialRestTime: number;
     status: TimerStatus;
     currentTimerType: TimerType;
-    autoNextPhaseTime: number;
+    pendingNextPhaseTime: number;
+    autoPlay: boolean;
 }
 
 export const increaseTomatoCount = createAction('TIMER/INCREASE_TOMATO');
@@ -32,6 +33,7 @@ export const resetTimer = createAction('TIMER/RESET');
 export const pendingTimer = createAction('TIMER/PENDING');
 export const endTimer = createAction('TIMER/TIME_ENDED');
 export const tick = createAction('TIMER/TICK');
+export const setAutoPlay = createAction<boolean>('TIMER/AUTOPLAY');
 
 const defaultState: TimerReducer = {
     workTimeSound: 'dudungtak.mp3',
@@ -43,7 +45,8 @@ const defaultState: TimerReducer = {
     initialRestTime: 5, // 5 min
     initialWorkTime: 5, // 25 min
     remainTime: 5, // 25 min, same as initialWorkTime
-    autoNextPhaseTime: 5000, // if 0, show next phase immediately
+    pendingNextPhaseTime: 5000, // if 0, show next phase immediately
+    autoPlay: true,
 };
 
 function resetTimerStateByType(state: Draft<TimerReducer>, timerType: TimerType) {
@@ -109,4 +112,7 @@ export default createReducer(defaultState, {
             resetTimerStateByType(state, TimerType.WORK);
         }
     },
+    [setAutoPlay.type]: (state, {payload}: PayloadAction<boolean>) => {
+        state.autoPlay = payload;
+    }
 });

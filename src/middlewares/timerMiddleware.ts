@@ -48,6 +48,9 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         clearTimeout(nextPhaseTimeout);
         audioController.pause();
         next(action);
+        if (timerState.autoPlay) {
+            dispatch(startTimer());
+        }
         return;
     }
 
@@ -64,10 +67,13 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         tickInterval = undefined;
 
         //NOTE if 5000 variable is undefined or 0, entTimer immediately
-        if (timerState.autoNextPhaseTime) {
+        if (timerState.pendingNextPhaseTime) {
             nextPhaseTimeout = setTimeout(() => {
                 next(endTimer());
-            }, timerState.autoNextPhaseTime);
+                if (timerState.autoPlay) {
+                    dispatch(startTimer());
+                }
+            }, timerState.pendingNextPhaseTime);
         } else {
             next(endTimer());
         }

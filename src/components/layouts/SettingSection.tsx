@@ -1,11 +1,17 @@
 import React, {ChangeEvent, useCallback, useMemo, useState} from 'react';
 import TabList from '../atoms/TabList';
 import {Box, Card} from 'rebass';
-import {Input, Label} from '@rebass/forms';
+import {Checkbox, Input, Label} from '@rebass/forms';
 import styled from '@emotion/styled';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../stores';
-import {changeInitialRestTime, changeInitialWorkTime, changeMaxTomatoCount, TimerStatus} from '../../stores/timer';
+import {
+    changeInitialRestTime,
+    changeInitialWorkTime,
+    changeMaxTomatoCount,
+    setAutoPlay,
+    TimerStatus
+} from '../../stores/timer';
 import {createSelector} from '@reduxjs/toolkit';
 
 const TabViewCard = styled(Card)`
@@ -102,7 +108,26 @@ const TimeSetting: React.FC = () => {
     );
 };
 
-const CommonSetting: React.FC = () => (<TabViewCard>기타세팅은 추후에..</TabViewCard>);
+const CommonSetting: React.FC = () => {
+    const autoPlayChecked = useSelector<RootState, boolean>((state) => state.timer.autoPlay);
+    const dispatch = useDispatch();
+    const toggleAutoPlay = useCallback(() => {
+        dispatch(setAutoPlay(!autoPlayChecked));
+    }, [autoPlayChecked]);
+
+    console.log('autoPlayChe', autoPlayChecked);
+    return (
+        <TabViewCard>
+            <Label width={[1 / 2, 1 / 4]} p={2}>
+                <Checkbox
+                    checked={autoPlayChecked}
+                    onChange={toggleAutoPlay}
+                />
+                자동시작
+            </Label>
+        </TabViewCard>
+    );
+};
 
 const SettingSection: React.FC = () => {
     const [currentShowingTabName, setShowingTab] = useState<string | undefined>(undefined);
