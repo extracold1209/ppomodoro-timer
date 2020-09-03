@@ -28,17 +28,11 @@ const TimerControlSection: React.FC = () => {
         }
     }, []);
 
-    const {startButtonText, startButtonVariant} = useMemo(() => {
+    const startButtonVariant = useMemo(() => {
         if (currentTimerType === TimerType.WORK) {
-            return {
-                startButtonText: '시작',
-                startButtonVariant: 'primary'
-            };
+            return 'primary';
         } else if (currentTimerType === TimerType.REST) {
-            return {
-                startButtonText: '다음',
-                startButtonVariant: 'secondary'
-            };
+            return 'secondary';
         } else {
             throw new Error();
         }
@@ -55,7 +49,7 @@ const TimerControlSection: React.FC = () => {
                             onClick={handleButtonClicked('START')}
                             marginRight={currentTomatoCount > 0 ? 2 : 0}
                         >
-                            {startButtonText}
+                            시작
                         </NoFocusButton>
                     }
                     {
@@ -72,6 +66,10 @@ const TimerControlSection: React.FC = () => {
                 >
                     정지
                 </NoFocusButton>
+            );
+        } else if (timerStatus === TimerStatus.PENDING) {
+            return (
+                <div>펜딩맨</div>
             );
         }
     }, [timerStatus, currentTomatoCount, maxTomatoCount]);

@@ -1,6 +1,6 @@
 import {Dispatch, Middleware, MiddlewareAPI} from 'redux';
 import {PayloadAction} from '@reduxjs/toolkit';
-import {endTimer, resetTimer, startTimer, suspendTimer, tick, TimerType} from '../stores/timer';
+import {endTimer, pendingTimer, resetTimer, startTimer, suspendTimer, tick, TimerType} from '../stores/timer';
 import AudioController from '../utils/AudioController';
 import {RootState} from '../stores';
 
@@ -47,9 +47,10 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
     if (timerState.remainTime === 1 && action.type !== suspendTimer.type) {
         if (timerState.currentTimerType === TimerType.WORK) {
             await audioController.play(timerState.workTimeSound);
-        } else {
+        } else if (timerState.currentTimerType === TimerType.REST) {
             await audioController.play(timerState.restTimeSound);
         }
+        next(pendingTimer());
     } else if (timerState.remainTime === 0) {
         clearInterval(tickInterval);
         tickInterval = undefined;

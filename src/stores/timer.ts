@@ -1,7 +1,7 @@
 import {createAction, createReducer, Draft, PayloadAction} from '@reduxjs/toolkit';
 
 export enum TimerStatus {
-    STOPPED, RUNNING
+    STOPPED, RUNNING, PENDING
 }
 
 export enum TimerType {
@@ -29,6 +29,7 @@ export const changeTimerStatus = createAction<TimerStatus>('TIMER/CHANGE_STATUS'
 export const startTimer = createAction('TIMER/START');
 export const suspendTimer = createAction('TIMER/STOP');
 export const resetTimer = createAction('TIMER/RESET');
+export const pendingTimer = createAction('TIMER/PENDING');
 export const endTimer = createAction('TIMER/TIME_ENDED');
 export const tick = createAction('TIMER/TICK');
 
@@ -72,6 +73,9 @@ export default createReducer(defaultState, {
         resetTimerStateByType(state, TimerType.WORK);
         state.currentTomatoCount = 0;
     },
+    [pendingTimer.type]: (state) => {
+        state.status = TimerStatus.PENDING;
+    },
     [changeInitialWorkTime.type]: (state, {payload}: PayloadAction<number>) => {
         state.initialWorkTime = payload;
         state.status = TimerStatus.STOPPED;
@@ -92,7 +96,7 @@ export default createReducer(defaultState, {
         state.currentTimerType = TimerType.WORK;
     },
     [tick.type]: (state) => {
-        if (state.remainTime > 0 && state.status === TimerStatus.RUNNING) {
+        if (state.remainTime > 0 && state.status !== TimerStatus.STOPPED) {
             state.remainTime--;
         } else {
             state.status = TimerStatus.STOPPED;
