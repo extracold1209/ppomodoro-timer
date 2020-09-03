@@ -36,7 +36,7 @@ const TimerControlSection: React.FC = () => {
                         <NoFocusButton
                             variant='primary'
                             onClick={handleButtonClicked('START')}
-                            marginRight={2}
+                            marginRight={currentTomatoCount > 0 ? 2 : 0}
                         >
                             시작
                         </NoFocusButton>
