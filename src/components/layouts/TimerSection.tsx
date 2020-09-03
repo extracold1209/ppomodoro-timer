@@ -64,6 +64,7 @@ const TimerSection: React.FC = () => {
                 padding={2}
                 color={'grey'}
                 fontSize={1}
+                style={{position: 'absolute'}}
             >
                 {tomatoCountNotiText}
             </Box>
