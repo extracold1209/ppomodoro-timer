@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 
+console.log('hello build');
 const app = express();
 
 app.use(express.json());
