@@ -42,9 +42,9 @@ const defaultState: TimerReducer = {
     currentTimerType: TimerType.WORK,
     currentTomatoCount: 0,
     maxTomatoCount: 10,
-    initialRestTime: 5, // 5 min
-    initialWorkTime: 5, // 25 min
-    remainTime: 5, // 25 min, same as initialWorkTime
+    initialRestTime: 5 * 60, // 5 min
+    initialWorkTime: 25 * 60, // 25 min
+    remainTime: 25 * 60, // 25 min, same as initialWorkTime
     pendingNextPhaseTime: 5000, // if 0, show next phase immediately
     autoPlay: true,
 };
