@@ -6,6 +6,13 @@ import {RootState} from '../../stores';
 import styled from '@emotion/styled';
 
 const NoFocusButton = styled(Button)`
+    padding: 0;
+    padding-top: 4px;
+    width: 7vw;
+    height: 7vw;
+    border-radius: 50%;
+    cursor: pointer;
+
     &:focus {
         outline: none;
     }
