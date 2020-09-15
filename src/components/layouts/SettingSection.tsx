@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useCallback, useMemo, useState} from 'react';
 import TabList from '../atoms/TabList';
-import {Box, Card} from 'rebass';
+import {Box, Button, Card} from 'rebass';
 import {Checkbox, Input, Label} from '@rebass/forms';
 import styled from '@emotion/styled';
 import {useDispatch, useSelector} from 'react-redux';
@@ -104,6 +104,18 @@ const TimeSetting: React.FC = () => {
                 onChange={handleInputChange('TOMATO_COUNT')}
                 suffix='번'
             />
+            <Box marginTop={3}>
+                <Button
+                    marginRight={2}
+                >
+                    적용
+                </Button>
+                <Button
+                    variant={'secondary'}
+                >
+                    취소
+                </Button>
+            </Box>
         </TabViewCard>
     );
 };
@@ -115,7 +127,6 @@ const CommonSetting: React.FC = () => {
         dispatch(setAutoPlay(!autoPlayChecked));
     }, [autoPlayChecked]);
 
-    console.log('autoPlayChe', autoPlayChecked);
     return (
         <TabViewCard>
             <Label width={[1 / 2, 1 / 4]} p={2}>
@@ -125,6 +136,18 @@ const CommonSetting: React.FC = () => {
                 />
                 자동시작
             </Label>
+            <Box marginTop={3}>
+                <Button
+                    marginRight={2}
+                >
+                    적용
+                </Button>
+                <Button
+                    variant={'secondary'}
+                >
+                    취소
+                </Button>
+            </Box>
         </TabViewCard>
     );
 };
