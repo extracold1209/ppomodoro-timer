@@ -13,15 +13,10 @@ import {
     TimerStatus
 } from '../../stores/timer';
 import {createSelector} from '@reduxjs/toolkit';
-import useEachRefresh from '../../hooks/useEachRefresh';
 import SuffixInput from '../atoms/SuffixInput';
 
 const TabViewCard = styled(Card)`
     margin: 8px 0 16px;
-`;
-
-const InlineLabel = styled(Label)`
-    display: inline; // css 적용 순서상 component property 가 먹지 않음
 `;
 
 const getPureNumber = (src: number | string, defaultValue = 1): number => {
@@ -47,15 +42,6 @@ const TimeSetting: React.FC = () => {
     const workTime = useSelector(workTimeReSelector);
     const restTime = useSelector(restTimeReSelector);
     const tomatoCount = useSelector<RootState, number>((state) => state.timer.maxTomatoCount);
-    const [workTimeState, setWorkTimeState] = useState<number | string>(workTime);
-    const [restTimeState, setRestTimeState] = useState<number | string>(restTime);
-    const [tomatoCountState, setTomatoCountState] = useState<number | string>(tomatoCount);
-
-    useEachRefresh(
-        [workTime, workTimeState, setWorkTimeState],
-        [restTime, restTimeState, setRestTimeState],
-        [tomatoCount, tomatoCountState, setTomatoCountState],
-    );
 
     const handleInputChange = useCallback((type: 'WORK' | 'REST' | 'TOMATO_COUNT') => (nextValue: number) => {
         switch (type) {
@@ -76,7 +62,7 @@ const TimeSetting: React.FC = () => {
             <Box marginBottom={1}>
                 <SuffixInput
                     label={'집중시간'}
-                    value={workTimeState}
+                    value={workTime}
                     onChange={handleInputChange('WORK')}
                     suffix={'분'}
                 />
@@ -84,7 +70,7 @@ const TimeSetting: React.FC = () => {
             <Box marginBottom={1}>
                 <SuffixInput
                     label='휴식시간'
-                    value={restTimeState}
+                    value={restTime}
                     onChange={handleInputChange('REST')}
                     suffix='분'
                 />
@@ -92,7 +78,7 @@ const TimeSetting: React.FC = () => {
             <Box marginBottom={1}>
                 <SuffixInput
                     label='반복횟수'
-                    value={tomatoCountState}
+                    value={tomatoCount}
                     onChange={handleInputChange('TOMATO_COUNT')}
                     suffix='번'
                 />
