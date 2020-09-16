@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import TabList from '../atoms/TabList';
-import {Box, Button, Card} from 'rebass';
+import {Box, Card} from 'rebass';
 import {Checkbox, Label} from '@rebass/forms';
 import styled from '@emotion/styled';
 import {useDispatch, useSelector} from 'react-redux';

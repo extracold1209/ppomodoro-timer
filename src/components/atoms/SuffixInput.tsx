@@ -32,6 +32,12 @@ const SuffixInput: React.FC<IProps> = (props) => {
         }
     }, []);
 
+    const handleOnBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+        if (!/^[1-9]+$/.exec(e.target.value)) {
+            onChange(1);
+        }
+    }, []);
+
     useEffect(() => {
         setValueState(value);
     }, [value]);
@@ -50,6 +56,7 @@ const SuffixInput: React.FC<IProps> = (props) => {
                 min={1}
                 value={valueState}
                 onChange={handleOnChange}
+                onBlur={handleOnBlur}
                 paddingRight={1}
                 marginRight={2}
                 width={'fit-content'}
