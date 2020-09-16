@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import TabList from '../atoms/TabList';
 import {Box, Card} from 'rebass';
 import {Checkbox, Label} from '@rebass/forms';
@@ -125,6 +125,10 @@ const SettingSection: React.FC = () => {
                 return <></>;
         }
     }, [currentShowingTabName]);
+
+    useEffect(() => {
+        setShowingTab(undefined);
+    }, [currentTimerStatus]);
 
     return (
         <>

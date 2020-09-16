@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Flex} from 'rebass';
 import styled from '@emotion/styled';
 import {DefaultTheme} from '../../constants/theme';
@@ -40,6 +40,10 @@ const TabList: React.FC<Props> = ({listItems, onClick, disabled}) => {
         onClick?.(item, isActivateSelect);
         setCurrentSelected(isActivateSelect ? item : undefined);
     }, [currentSelected]);
+
+    useEffect(() => {
+        setCurrentSelected(undefined);
+    }, [disabled]);
 
     return (
         <Flex
