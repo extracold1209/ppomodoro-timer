@@ -8,8 +8,8 @@ import styled from '@emotion/styled';
 const NoFocusButton = styled(Button)`
     padding: 0;
     padding-top: 4px;
-    width: 7vw;
-    height: 7vw;
+    width: 10vh;
+    height: 10vh;
     border-radius: 50%;
     cursor: pointer;
 
