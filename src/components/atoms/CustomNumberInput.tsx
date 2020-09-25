@@ -8,14 +8,14 @@ const InlineLabel = styled(Label)`
 `;
 
 type IProps = {
-    label: string;
+    label?: string;
+    suffix?: string;
     value: number | string;
     onChange: (e: number) => void;
     inputProps?: Omit<InputProps, 'css'>;
-    suffix?: string;
 }
 
-const SuffixInput: React.FC<IProps> = (props) => {
+const CustomNumberInput: React.FC<IProps> = (props) => {
     const {label, value, onChange, suffix, inputProps} = props;
     const [valueState, setValueState] = useState(value);
 
@@ -44,11 +44,15 @@ const SuffixInput: React.FC<IProps> = (props) => {
 
     return (
         <>
-            <InlineLabel
-                htmlFor={`${hashCode}-input`}
-                paddingBottom={2}
-                paddingRight={2}
-            >{label}</InlineLabel>
+            {
+                label && (
+                    <InlineLabel
+                        htmlFor={`${hashCode}-input`}
+                        paddingBottom={2}
+                        paddingRight={2}
+                    >{label}</InlineLabel>
+                )
+            }
             <Input
                 {...inputProps}
                 id={`${hashCode}-input`}
@@ -59,7 +63,7 @@ const SuffixInput: React.FC<IProps> = (props) => {
                 onBlur={handleOnBlur}
                 paddingRight={1}
                 marginRight={2}
-                width={'fit-content'}
+                width={'12%'}
                 display={'inline-block'}
             />
             <span>{suffix}</span>
@@ -67,4 +71,4 @@ const SuffixInput: React.FC<IProps> = (props) => {
     );
 };
 
-export default SuffixInput;
+export default CustomNumberInput;

@@ -13,7 +13,7 @@ import {
     TimerStatus
 } from '../../stores/timer';
 import {createSelector} from '@reduxjs/toolkit';
-import SuffixInput from '../atoms/SuffixInput';
+import CustomNumberInput from '../atoms/CustomNumberInput';
 
 const TabViewCard = styled(Card)`
     margin: 8px 0 16px;
@@ -36,6 +36,42 @@ const restTimeReSelector = createSelector<RootState, number, number>(
     (state) => state.timer.initialRestTime,
     (workTimeSecond) => Math.floor(workTimeSecond / 60)
 );
+
+const MinuteSecondInput: React.FC<{value: number, onChange: (nextSecond: number) => void}> = (props) => {
+    const {value, onChange} = props;
+    console.log('worktime is ', value);
+    const [minute, second] = useMemo(() => {
+        return [
+            Math.floor(value / 60),
+            Math.floor(value % 60),
+        ]
+    }, [value]);
+
+    const handleOnMinuteChanged = useCallback((e: number) => {
+        onChange(e * 60 + second);
+    }, [value]);
+
+    const handleOnSecondChanged = useCallback((e: number) => {
+        onChange(minute * 60 + e);
+    }, [value]);
+
+    return (
+        <>
+            <CustomNumberInput
+                label={'집중시간'}
+                value={minute}
+                onChange={handleOnMinuteChanged}
+                suffix={'분'}
+            />
+            <Box mr={2} as={'span'}/>
+            <CustomNumberInput
+                value={second}
+                onChange={handleOnSecondChanged}
+                suffix={'초'}
+            />
+        </>
+    )
+}
 
 const TimeSetting: React.FC = () => {
     const dispatch = useDispatch();
@@ -60,15 +96,13 @@ const TimeSetting: React.FC = () => {
     return (
         <TabViewCard>
             <Box marginBottom={1}>
-                <SuffixInput
-                    label={'집중시간'}
+                <MinuteSecondInput
                     value={workTime}
                     onChange={handleInputChange('WORK')}
-                    suffix={'분'}
                 />
             </Box>
             <Box marginBottom={1}>
-                <SuffixInput
+                <CustomNumberInput
                     label='휴식시간'
                     value={restTime}
                     onChange={handleInputChange('REST')}
@@ -76,7 +110,7 @@ const TimeSetting: React.FC = () => {
                 />
             </Box>
             <Box marginBottom={1}>
-                <SuffixInput
+                <CustomNumberInput
                     label='반복횟수'
                     value={tomatoCount}
                     onChange={handleInputChange('TOMATO_COUNT')}
