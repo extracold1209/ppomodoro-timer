@@ -37,14 +37,14 @@ const restTimeReSelector = createSelector<RootState, number, number>(
     (workTimeSecond) => Math.floor(workTimeSecond / 60)
 );
 
-const MinuteSecondInput: React.FC<{value: number, onChange: (nextSecond: number) => void}> = (props) => {
+const MinuteSecondInput: React.FC<{ value: number, onChange: (nextSecond: number) => void }> = (props) => {
     const {value, onChange} = props;
     console.log('worktime is ', value);
     const [minute, second] = useMemo(() => {
         return [
             Math.floor(value / 60),
             Math.floor(value % 60),
-        ]
+        ];
     }, [value]);
 
     const handleOnMinuteChanged = useCallback((e: number) => {
@@ -70,8 +70,8 @@ const MinuteSecondInput: React.FC<{value: number, onChange: (nextSecond: number)
                 suffix={'초'}
             />
         </>
-    )
-}
+    );
+};
 
 const TimeSetting: React.FC = () => {
     const dispatch = useDispatch();
@@ -82,13 +82,13 @@ const TimeSetting: React.FC = () => {
     const handleInputChange = useCallback((type: 'WORK' | 'REST' | 'TOMATO_COUNT') => (nextValue: number) => {
         switch (type) {
             case 'WORK':
-                dispatch(changeInitialWorkTime(getPureNumber(nextValue * 60)));
+                dispatch(changeInitialWorkTime(nextValue));
                 break;
             case 'REST':
-                dispatch(changeInitialRestTime(getPureNumber(nextValue) * 60));
+                dispatch(changeInitialRestTime(nextValue));
                 break;
             case 'TOMATO_COUNT':
-                dispatch(changeMaxTomatoCount(getPureNumber(nextValue)));
+                dispatch(changeMaxTomatoCount(nextValue));
                 break;
         }
     }, []);
