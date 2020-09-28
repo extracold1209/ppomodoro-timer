@@ -30,13 +30,13 @@ const CustomNumberInput: React.FC<IProps> = (props) => {
         if (/^[1-9]+$/.exec(nextValue)) {
             onChange(parseInt(nextValue));
         }
-    }, []);
+    }, [onChange]);
 
     const handleOnBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
         if (!/^[1-9]+$/.exec(e.target.value)) {
             onChange(1);
         }
-    }, []);
+    }, [onChange]);
 
     useEffect(() => {
         setValueState(value);
