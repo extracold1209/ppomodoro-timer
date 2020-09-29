@@ -19,27 +19,18 @@ const TabViewCard = styled(Card)`
     margin: 8px 0 16px;
 `;
 
-const getPureNumber = (src: number | string, defaultValue = 1): number => {
-    if (typeof src === 'string') {
-        return parseInt(src) || defaultValue;
-    } else {
-        return src;
-    }
-};
-
 const workTimeReSelector = createSelector<RootState, number, number>(
     (state) => state.timer.initialWorkTime,
-    (workTimeSecond) => Math.floor(workTimeSecond / 60)
+    (workTimeSecond) => Math.floor(workTimeSecond)
 );
 
 const restTimeReSelector = createSelector<RootState, number, number>(
     (state) => state.timer.initialRestTime,
-    (workTimeSecond) => Math.floor(workTimeSecond / 60)
+    (workTimeSecond) => Math.floor(workTimeSecond)
 );
 
 const MinuteSecondInput: React.FC<{ value: number, onChange: (nextSecond: number) => void }> = (props) => {
     const {value, onChange} = props;
-    console.log('worktime is ', value);
     const [minute, second] = useMemo(() => {
         return [
             Math.floor(value / 60),
@@ -102,11 +93,9 @@ const TimeSetting: React.FC = () => {
                 />
             </Box>
             <Box marginBottom={1}>
-                <CustomNumberInput
-                    label='휴식시간'
+                <MinuteSecondInput
                     value={restTime}
                     onChange={handleInputChange('REST')}
-                    suffix='분'
                 />
             </Box>
             <Box marginBottom={1}>
