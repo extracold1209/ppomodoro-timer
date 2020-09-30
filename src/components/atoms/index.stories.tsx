@@ -1,7 +1,7 @@
 import React from 'react';
 import {action} from '@storybook/addon-actions';
 import TabList from './TabList';
-import SuffixInput from './SuffixInput';
+import CustomNumberInput from './CustomNumberInput';
 
 export default {title: 'atoms'};
 
@@ -11,7 +11,7 @@ export const tabList = () => <TabList
     disabled={false}
 />;
 
-export const suffixInput = () => <SuffixInput
+export const customNumberInput = () => <CustomNumberInput
     label='테스트'
     suffix='번'
     value={5}

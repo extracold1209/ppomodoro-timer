@@ -13,29 +13,56 @@ import {
     TimerStatus
 } from '../../stores/timer';
 import {createSelector} from '@reduxjs/toolkit';
-import SuffixInput from '../atoms/SuffixInput';
+import CustomNumberInput from '../atoms/CustomNumberInput';
 
 const TabViewCard = styled(Card)`
     margin: 8px 0 16px;
 `;
 
-const getPureNumber = (src: number | string, defaultValue = 1): number => {
-    if (typeof src === 'string') {
-        return parseInt(src) || defaultValue;
-    } else {
-        return src;
-    }
-};
-
 const workTimeReSelector = createSelector<RootState, number, number>(
     (state) => state.timer.initialWorkTime,
-    (workTimeSecond) => Math.floor(workTimeSecond / 60)
+    (workTimeSecond) => Math.floor(workTimeSecond)
 );
 
 const restTimeReSelector = createSelector<RootState, number, number>(
     (state) => state.timer.initialRestTime,
-    (workTimeSecond) => Math.floor(workTimeSecond / 60)
+    (workTimeSecond) => Math.floor(workTimeSecond)
 );
+
+const MinuteSecondInput: React.FC<{ value: number, onChange: (nextSecond: number) => void }> = (props) => {
+    const {value, onChange} = props;
+    const [minute, second] = useMemo(() => {
+        return [
+            Math.floor(value / 60),
+            Math.floor(value % 60),
+        ];
+    }, [value]);
+
+    const handleOnMinuteChanged = useCallback((e: number) => {
+        onChange(e * 60 + second);
+    }, [value]);
+
+    const handleOnSecondChanged = useCallback((e: number) => {
+        onChange(minute * 60 + e);
+    }, [value]);
+
+    return (
+        <>
+            <CustomNumberInput
+                label={'집중시간'}
+                value={minute}
+                onChange={handleOnMinuteChanged}
+                suffix={'분'}
+            />
+            <Box mr={2} as={'span'}/>
+            <CustomNumberInput
+                value={second}
+                onChange={handleOnSecondChanged}
+                suffix={'초'}
+            />
+        </>
+    );
+};
 
 const TimeSetting: React.FC = () => {
     const dispatch = useDispatch();
@@ -46,13 +73,13 @@ const TimeSetting: React.FC = () => {
     const handleInputChange = useCallback((type: 'WORK' | 'REST' | 'TOMATO_COUNT') => (nextValue: number) => {
         switch (type) {
             case 'WORK':
-                dispatch(changeInitialWorkTime(getPureNumber(nextValue * 60)));
+                dispatch(changeInitialWorkTime(nextValue));
                 break;
             case 'REST':
-                dispatch(changeInitialRestTime(getPureNumber(nextValue) * 60));
+                dispatch(changeInitialRestTime(nextValue));
                 break;
             case 'TOMATO_COUNT':
-                dispatch(changeMaxTomatoCount(getPureNumber(nextValue)));
+                dispatch(changeMaxTomatoCount(nextValue));
                 break;
         }
     }, []);
@@ -60,23 +87,19 @@ const TimeSetting: React.FC = () => {
     return (
         <TabViewCard>
             <Box marginBottom={1}>
-                <SuffixInput
-                    label={'집중시간'}
+                <MinuteSecondInput
                     value={workTime}
                     onChange={handleInputChange('WORK')}
-                    suffix={'분'}
                 />
             </Box>
             <Box marginBottom={1}>
-                <SuffixInput
-                    label='휴식시간'
+                <MinuteSecondInput
                     value={restTime}
                     onChange={handleInputChange('REST')}
-                    suffix='분'
                 />
             </Box>
             <Box marginBottom={1}>
-                <SuffixInput
+                <CustomNumberInput
                     label='반복횟수'
                     value={tomatoCount}
                     onChange={handleInputChange('TOMATO_COUNT')}
