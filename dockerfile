@@ -3,5 +3,5 @@ COPY . .
 RUN yarn
 RUN yarn webpack
 
-EXPOSE 8080
+EXPOSE 4000
 CMD ["yarn", "start"]

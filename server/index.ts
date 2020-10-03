@@ -5,7 +5,7 @@ import path from 'path';
 const publicDirectoryPath = path.join(__dirname, '..', 'public');
 const app = express();
 
-app.use(serveFavicon(path.join(publicDirectoryPath, 'favicon.ico')))
+app.use(serveFavicon(path.join(publicDirectoryPath, 'favicon.ico')));
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
@@ -19,6 +19,6 @@ app.use('/l7check', (req, res) => {
     res.send('hello world!');
 });
 
-app.listen(8080, () => {
-    console.log('express server now listen on 8080');
+app.listen(4000, () => {
+    console.log('express server now listen on 4000');
 });
