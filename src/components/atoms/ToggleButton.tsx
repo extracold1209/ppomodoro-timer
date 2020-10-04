@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from '@emotion/styled';
 
 const ButtonContainer = styled.button`
@@ -19,14 +19,23 @@ const ButtonContainer = styled.button`
 `;
 
 type IProps = {
-    content: string;
+    onValue: string;
+    offValue: string;
     onClick?: () => void;
 }
 
 const ToggleButton: React.FC<IProps> = (props) => {
+    const {onValue, offValue, onClick} = props;
+    const [isOn, toggleState] = useState(true);
+
+    const handleOnClick = useCallback(() => {
+        toggleState(!isOn);
+        onClick?.();
+    }, [isOn]);
+
     return (
-        <ButtonContainer onClick={props.onClick}>
-            {props.content}
+        <ButtonContainer onClick={handleOnClick}>
+            {isOn ? onValue : offValue}
         </ButtonContainer>
     );
 };

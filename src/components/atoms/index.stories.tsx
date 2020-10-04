@@ -3,6 +3,7 @@ import {action} from '@storybook/addon-actions';
 import TabList from './TabList';
 import CustomNumberInput from './CustomNumberInput';
 import ToggleButton from './ToggleButton';
+import Card from './Card';
 
 export default {title: 'atoms'};
 
@@ -20,6 +21,9 @@ export const customNumberInput = () => <CustomNumberInput
 />;
 
 export const toggleButton = () => <ToggleButton
-    content={'Hello'}
+    onValue={'Hello'}
+    offValue={'World'}
     onClick={action('ON_CLICK')}
 />;
+
+export const card = () => <Card>Test Card</Card>;
