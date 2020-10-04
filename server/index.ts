@@ -12,7 +12,7 @@ app.use(express.urlencoded({
 }));
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'index.html')));
-app.use('/public', express.static(publicDirectoryPath));
+app.use('/', express.static(publicDirectoryPath));
 
 
 app.use('/l7check', (req, res) => {
