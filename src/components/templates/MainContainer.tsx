@@ -3,27 +3,22 @@ import {Box} from 'rebass';
 import SettingSection from '../layouts/SettingSection';
 import TimerSection from '../layouts/TimerSection';
 import TimerControlSection from '../layouts/TimerControlSection';
+import styled from '@emotion/styled';
 
-const Container: React.FC = (props) => (
-    <Box
-        sx={{
-            maxWidth: 1024,
-            mx: 'auto',
-            px: 3,
-        }}>
-        {props.children}
-    </Box>
-);
+const RootContainer: React.FC = styled.div`
+    max-width: 620px;
+    margin: auto;
+`;
 
 const MainContainer: React.FC = () => {
     return (
         <>
-            <Container>
+            <RootContainer>
                 <SettingSection/>
                 <TimerSection/>
                 <Box marginY={4}/>
                 <TimerControlSection/>
-            </Container>
+            </RootContainer>
         </>
 
     );

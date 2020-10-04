@@ -2,6 +2,7 @@ import React from 'react';
 import {action} from '@storybook/addon-actions';
 import TabList from './TabList';
 import CustomNumberInput from './CustomNumberInput';
+import ToggleButton from './ToggleButton';
 
 export default {title: 'atoms'};
 
@@ -16,4 +17,9 @@ export const customNumberInput = () => <CustomNumberInput
     suffix='번'
     value={5}
     onChange={action('ON_CHANGE')}
+/>;
+
+export const toggleButton = () => <ToggleButton
+    content={'Hello'}
+    onClick={action('ON_CLICK')}
 />;
