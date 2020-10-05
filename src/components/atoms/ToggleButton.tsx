@@ -11,8 +11,8 @@ const ButtonContainer = styled.button`
     width: 200px;
     background-color: white;
     border-style: none;
-    margin: 20px 0px 0px;
-    padding: 0px 12px;
+    padding: 0 12px;
+    margin: 8px 0;
     border-radius: 4px;
     transition: color 0.5s ease-in-out 0s;
     &:focus {
