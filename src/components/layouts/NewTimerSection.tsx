@@ -6,7 +6,7 @@ import {DefaultTheme} from '../../constants/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
-import {endTimer, startTimer} from '../../stores/timer';
+import {Timer, stopTimer, startTimer} from '../../stores/newTimer';
 
 const CardContainer = styled(Card)`
     text-align: center;
@@ -24,11 +24,11 @@ const TimerContainer = styled.div<{ theme: DefaultTheme }>`
     color: white;
 `;
 
-const timerTextReSelector = createSelector<RootState, number, { minute: string, second: string }>(
-    (state) => state.timer.remainTime,
-    (time) => {
-        const minute = Math.floor(time / 60);
-        const second = time % 60;
+const timerTextReSelector = createSelector<RootState, Timer, { minute: string, second: string }>(
+    (state) => state.newTimer.selectedTimer,
+    (timer) => {
+        const minute = Math.floor(timer.currentTime / 60);
+        const second = timer.currentTime % 60;
 
         return {
             minute: (minute < 10) ? '0' + minute : minute + '',
@@ -45,7 +45,7 @@ const NewTimerSection: React.FC = () => {
         if (!nextFlag) {
             dispatch(startTimer());
         } else {
-            dispatch(endTimer());
+            dispatch(stopTimer());
         }
     }, []);
 
