@@ -21,8 +21,8 @@ export const customNumberInput = () => <CustomNumberInput
 />;
 
 export const toggleButton = () => <ToggleButton
-    onValue={'Hello'}
-    offValue={'World'}
+    trueValue={'Hello'}
+    falseValue={'World'}
     onClick={action('ON_CLICK')}
 />;
 

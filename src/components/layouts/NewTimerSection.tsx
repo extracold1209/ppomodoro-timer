@@ -23,8 +23,9 @@ const NewTimerSection: React.FC = () => {
                 01:00
             </TimerContainer>
             <ToggleButton
-                onValue={'시작'}
-                offValue={'정지'}
+                trueValue={'시작'}
+                falseValue={'정지'}
+                onClick={handleOnClick}
             />
         </CardContainer>
     );
