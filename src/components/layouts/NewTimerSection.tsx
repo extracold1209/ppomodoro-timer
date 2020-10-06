@@ -6,7 +6,8 @@ import {DefaultTheme} from '../../constants/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
-import {Timer, stopTimer, startTimer} from '../../stores/newTimer';
+import {Timer, stopTimer, startTimer, NewTimerReducer, selectTimer} from '../../stores/newTimer';
+import RadioButtons from "../atoms/RadioButtons";
 
 const CardContainer = styled(Card)`
     text-align: center;
@@ -37,8 +38,17 @@ const timerTextReSelector = createSelector<RootState, Timer, { minute: string, s
     },
 );
 
+const timerReSelector = createSelector<RootState, NewTimerReducer,[string[], string]>(
+    (state) => state.newTimer,
+    (reducer) => ([
+        reducer.timers.map((timer) => timer.timerName),
+        reducer.selectedTimer.timerName,
+    ]),
+);
+
 const NewTimerSection: React.FC = () => {
     const {minute, second} = useSelector(timerTextReSelector);
+    const [timers, selected] = useSelector(timerReSelector);
     const dispatch = useDispatch();
 
     const handleOnClick = useCallback((nextFlag: boolean) => {
@@ -49,8 +59,17 @@ const NewTimerSection: React.FC = () => {
         }
     }, []);
 
+    const handleOnChangeTimer = useCallback((e: string) => {
+        dispatch(selectTimer(e));
+    }, [timers]);
+
     return (
         <CardContainer>
+            <RadioButtons
+                defaultSelected={selected}
+                values={timers}
+                onChange={handleOnChangeTimer}
+            />
             <TimerContainer>
                 {minute}:{second}
             </TimerContainer>
