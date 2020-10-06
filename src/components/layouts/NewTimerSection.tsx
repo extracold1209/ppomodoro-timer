@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
 import {Timer, stopTimer, startTimer, NewTimerReducer, selectTimer} from '../../stores/newTimer';
-import RadioButtons from "../atoms/RadioButtons";
+import RadioButtons from '../atoms/RadioButtons';
 
 const CardContainer = styled(Card)`
     text-align: center;
@@ -21,6 +21,7 @@ const CardContainer = styled(Card)`
 
 const TimerContainer = styled.div<{ theme: DefaultTheme }>`
     user-select: none;
+    font-family: Concert One, ArialRounded, cursive;
     font-size: 100px;
     color: white;
 `;
