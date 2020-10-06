@@ -4,6 +4,7 @@ import TabList from './TabList';
 import CustomNumberInput from './CustomNumberInput';
 import ToggleButton from './ToggleButton';
 import Card from './Card';
+import RadioButtons from './RadioButtons';
 
 export default {title: 'atoms'};
 
@@ -27,3 +28,8 @@ export const toggleButton = () => <ToggleButton
 />;
 
 export const card = () => <Card>Test Card</Card>;
+
+export const radioButtons = () => <RadioButtons
+    values={['hello', 'world']}
+    onChange={(e) => action('ON_CLICK', )(e)}
+/>;
