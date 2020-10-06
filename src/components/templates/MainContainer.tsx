@@ -1,7 +1,4 @@
 import React from 'react';
-import {Box} from 'rebass';
-import SettingSection from '../layouts/SettingSection';
-import TimerControlSection from '../layouts/TimerControlSection';
 import styled from '@emotion/styled';
 import NewTimerSection from '../layouts/NewTimerSection';
 
@@ -14,7 +11,9 @@ const MainContainer: React.FC = () => {
     return (
         <>
             <RootContainer>
-                <SettingSection/>
+                <div style={{
+                    margin: '5vh 0'
+                }}/>
                 <NewTimerSection/>
             </RootContainer>
         </>
