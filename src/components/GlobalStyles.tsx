@@ -9,6 +9,7 @@ const GlobalStyles: React.FC = () => (
         }
 
         body {
+            background-color: #FF6C5C;
             padding-bottom: 52px;
         }
     `}/>
