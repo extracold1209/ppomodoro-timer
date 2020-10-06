@@ -34,7 +34,7 @@ const LongPressDesignButton: React.FC<IProps> = (props) => {
 
     const handleOnClick = useCallback(() => {
         onClick?.();
-    }, []);
+    }, [onClick]);
 
     return (
         <ButtonContainer onClick={handleOnClick}>
