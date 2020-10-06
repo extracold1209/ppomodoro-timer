@@ -29,6 +29,7 @@ export const toggleButton = () => <LongPressDesignButton
 export const card = () => <Card>Test Card</Card>;
 
 export const radioButtons = () => <RadioButtons
+    selected={'hello'}
     values={['hello', 'world']}
     onChange={(e) => action('ON_CLICK', )(e)}
 />;

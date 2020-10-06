@@ -2,6 +2,7 @@ import {createAction, createReducer, PayloadAction} from '@reduxjs/toolkit';
 
 export type Timer = {
     timerName: string;
+    endSound: string;
     initialTime: number;
     currentTime: number;
 }
@@ -18,12 +19,24 @@ export interface NewTimerReducer {
 
 export const startTimer = createAction('NEW_TIMER/START');
 export const stopTimer = createAction('NEW_TIMER/STOP');
+export const nextTimer = createAction('NEW_TIMER/NEXT');
 export const selectTimer = createAction<string>('NEW_TIMER/SELECT');
 export const tick = createAction('NEW_TIMER/TICK');
 
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
+function createTimer({timerName, initialTime, endSound}: PartialBy<Omit<Timer, 'currentTime'>, 'endSound'>): Timer {
+    return {
+        timerName,
+        initialTime,
+        currentTime: initialTime,
+        endSound: endSound || 'tadya.mp3',
+    };
+}
+
 const defaultTimers: Timer[] = [
-    {timerName: '집중시간', initialTime: 600, currentTime: 600},
-    {timerName: '휴식시간', initialTime: 300, currentTime: 300},
+    createTimer({timerName: '집중시간', initialTime: 1500}),
+    createTimer({timerName: '휴식시간', initialTime: 300}),
 ];
 
 const defaultState: NewTimerReducer = {
@@ -43,9 +56,25 @@ export default createReducer(defaultState, {
             console.error('try to select timer is failed!');
         }
     },
+    [nextTimer.type]: (state) => {
+        state.selectedTimer.currentTime = state.selectedTimer.initialTime;
+        const currentIndex = state.timers.findIndex(timer => timer.timerName === state.selectedTimer.timerName);
+        if (currentIndex >= state.timers.length - 1) {
+            state.selectedTimer = state.timers[0];
+        } else {
+            state.selectedTimer = state.timers[currentIndex + 1];
+        }
+        state.selectedTimer.currentTime = state.selectedTimer.initialTime;
+    },
     [tick.type]: (state) => {
         if (state.selectedTimer.currentTime > 0) {
             state.selectedTimer.currentTime--;
         }
-    }
+    },
+    [startTimer.type]: (state) => {
+        state.status = TimerStatus.STARTED;
+    },
+    [stopTimer.type]: (state) => {
+        state.status = TimerStatus.STOPPED;
+    },
 });

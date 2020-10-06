@@ -1,10 +1,10 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback} from 'react';
 import {CSSTransition} from 'react-transition-group';
 import styled from '@emotion/styled';
 
 type IProps = {
     values: string[];
-    defaultSelected?: string;
+    selected: string;
     onChange?: (value: string) => void;
 }
 
@@ -47,11 +47,9 @@ const Button = styled.button<{ selected: boolean }>`
 `;
 
 const RadioButtons: React.FC<IProps> = (props) => {
-    const {values, defaultSelected, onChange} = props;
-    const [selectedValue, setSelectedValue] = useState(defaultSelected);
+    const {values, selected, onChange} = props;
 
     const handleOnClick = useCallback((value: string) => () => {
-        setSelectedValue(value);
         onChange?.(value);
     }, [values]);
 
@@ -65,7 +63,7 @@ const RadioButtons: React.FC<IProps> = (props) => {
                 >
                     <Button
                         onClick={handleOnClick(value)}
-                        selected={value === selectedValue}
+                        selected={value === selected}
                     >{value}</Button>
                 </CSSTransition>
             ))}

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import styled from '@emotion/styled';
 import Card from '../atoms/Card';
 import LongPressDesignButton from '../atoms/LongPressDesignButton';
@@ -8,6 +8,7 @@ import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
 import {Timer, stopTimer, startTimer, NewTimerReducer, selectTimer} from '../../stores/newTimer';
 import RadioButtons from '../atoms/RadioButtons';
+import {TimerStatus} from '../../stores/timer';
 
 const CardContainer = styled(Card)`
     text-align: center;
@@ -39,7 +40,7 @@ const timerTextReSelector = createSelector<RootState, Timer, { minute: string, s
     },
 );
 
-const timerReSelector = createSelector<RootState, NewTimerReducer,[string[], string]>(
+const timerReSelector = createSelector<RootState, NewTimerReducer, [string[], string]>(
     (state) => state.newTimer,
     (reducer) => ([
         reducer.timers.map((timer) => timer.timerName),
@@ -55,21 +56,26 @@ const buttonStates = {
 const NewTimerSection: React.FC = () => {
     const {minute, second} = useSelector(timerTextReSelector);
     const [timers, selected] = useSelector(timerReSelector);
-    const [buttonValue, setButtonValue] = useState(buttonStates.START);
+    const timerStatus = useSelector<RootState>((state) => state.newTimer.status);
     const dispatch = useDispatch();
+
+    const buttonValue = useMemo(() => {
+        if (timerStatus === TimerStatus.STOPPED) {
+            return buttonStates.START;
+        } else {
+            return buttonStates.STOP;
+        }
+    }, [timerStatus]);
 
     const handleOnClick = useCallback(() => {
         if (buttonValue === buttonStates.START) {
-            setButtonValue(buttonStates.STOP);
             dispatch(startTimer());
         } else {
-            setButtonValue(buttonStates.START);
             dispatch(stopTimer());
         }
     }, [buttonValue]);
 
     const handleOnChangeTimer = useCallback((e: string) => {
-        setButtonValue(buttonStates.START);
         dispatch(stopTimer());
         dispatch(selectTimer(e));
     }, [timers]);
@@ -77,7 +83,7 @@ const NewTimerSection: React.FC = () => {
     return (
         <CardContainer>
             <RadioButtons
-                defaultSelected={selected}
+                selected={selected}
                 values={timers}
                 onChange={handleOnChangeTimer}
             />
