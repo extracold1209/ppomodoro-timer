@@ -34,11 +34,11 @@ const defaultState: NewTimerReducer = {
 
 export default createReducer(defaultState, {
     [selectTimer.type]: (state, {payload}: PayloadAction<number>) => {
-        state.selectedTimer.currentTime = 0;
+        state.selectedTimer.currentTime = state.selectedTimer.initialTime;
         state.selectedTimer = state.timers[payload];
+        state.selectedTimer.currentTime = state.selectedTimer.initialTime;
     },
     [tick.type]: (state) => {
-        console.log('pya', state.selectedTimer.currentTime);
         if (state.selectedTimer.currentTime > 0) {
             state.selectedTimer.currentTime--;
         }
