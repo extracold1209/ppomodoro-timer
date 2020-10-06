@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import styled from '@emotion/styled';
 
 const ButtonContainer = styled.button`
@@ -25,26 +25,22 @@ const ButtonContainer = styled.button`
 `;
 
 type IProps = {
-    trueValue: string;
-    falseValue: string;
-    initialState?: boolean;
-    onClick?: (isOn: boolean) => void;
+    value: string;
+    onClick?: () => void;
 }
 
-const ToggleButton: React.FC<IProps> = (props) => {
-    const {trueValue, falseValue, onClick, initialState = true} = props;
-    const [isOn, toggleState] = useState(initialState);
+const LongPressDesignButton: React.FC<IProps> = (props) => {
+    const {value, onClick} = props;
 
     const handleOnClick = useCallback(() => {
-        toggleState(!isOn);
-        onClick?.(!isOn);
-    }, [isOn]);
+        onClick?.();
+    }, []);
 
     return (
         <ButtonContainer onClick={handleOnClick}>
-            {isOn ? trueValue : falseValue}
+            {value}
         </ButtonContainer>
     );
 };
 
-export default ToggleButton;
+export default LongPressDesignButton;

@@ -1,7 +1,7 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from '@emotion/styled';
 import Card from '../atoms/Card';
-import ToggleButton from '../atoms/ToggleButton';
+import LongPressDesignButton from '../atoms/LongPressDesignButton';
 import {DefaultTheme} from '../../constants/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from '@reduxjs/toolkit';
@@ -46,20 +46,30 @@ const timerReSelector = createSelector<RootState, NewTimerReducer,[string[], str
     ]),
 );
 
+const buttonStates = {
+    START: '시작',
+    STOP: '정지',
+};
+
 const NewTimerSection: React.FC = () => {
     const {minute, second} = useSelector(timerTextReSelector);
     const [timers, selected] = useSelector(timerReSelector);
+    const [buttonValue, setButtonValue] = useState(buttonStates.START);
     const dispatch = useDispatch();
 
-    const handleOnClick = useCallback((nextFlag: boolean) => {
-        if (!nextFlag) {
+    const handleOnClick = useCallback(() => {
+        if (buttonValue === buttonStates.START) {
+            setButtonValue(buttonStates.STOP);
             dispatch(startTimer());
         } else {
+            setButtonValue(buttonStates.START);
             dispatch(stopTimer());
         }
-    }, []);
+    }, [buttonValue]);
 
     const handleOnChangeTimer = useCallback((e: string) => {
+        setButtonValue(buttonStates.START);
+        dispatch(stopTimer());
         dispatch(selectTimer(e));
     }, [timers]);
 
@@ -73,9 +83,8 @@ const NewTimerSection: React.FC = () => {
             <TimerContainer>
                 {minute}:{second}
             </TimerContainer>
-            <ToggleButton
-                trueValue={'시작'}
-                falseValue={'정지'}
+            <LongPressDesignButton
+                value={buttonValue}
                 onClick={handleOnClick}
             />
         </CardContainer>
