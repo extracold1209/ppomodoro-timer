@@ -29,7 +29,7 @@ type IProps = {
     onClick?: () => void;
 }
 
-const LongPressDesignButton: React.FC<IProps> = (props) => {
+const PressButton: React.FC<IProps> = (props) => {
     const {value, onClick} = props;
 
     const handleOnClick = useCallback(() => {
@@ -43,4 +43,4 @@ const LongPressDesignButton: React.FC<IProps> = (props) => {
     );
 };
 
-export default LongPressDesignButton;
+export default PressButton;

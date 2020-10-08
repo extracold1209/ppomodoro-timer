@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo} from 'react';
 import styled from '@emotion/styled';
 import Card from '../atoms/Card';
-import LongPressDesignButton from '../atoms/LongPressDesignButton';
+import PressButton from '../atoms/PressButton';
 import {DefaultTheme} from '../../constants/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from '@reduxjs/toolkit';
@@ -18,6 +18,11 @@ const CardContainer = styled(Card)`
     box-shadow: none;
     border-radius: 8px;
     border: none;
+`;
+
+const CardCenterMargin = styled.div`
+    margin: auto;
+    padding: 0 8px;
 `;
 
 const TimerContainer = styled.div<{ theme: DefaultTheme }>`
@@ -81,20 +86,22 @@ const NewTimerSection: React.FC = () => {
     }, [timers]);
 
     return (
-        <CardContainer>
-            <RadioButtons
-                selected={selected}
-                values={timers}
-                onChange={handleOnChangeTimer}
-            />
-            <TimerContainer>
-                {minute}:{second}
-            </TimerContainer>
-            <LongPressDesignButton
-                value={buttonValue}
-                onClick={handleOnClick}
-            />
-        </CardContainer>
+        <CardCenterMargin>
+            <CardContainer>
+                <RadioButtons
+                    selected={selected}
+                    values={timers}
+                    onChange={handleOnChangeTimer}
+                />
+                <TimerContainer>
+                    {minute}:{second}
+                </TimerContainer>
+                <PressButton
+                    value={buttonValue}
+                    onClick={handleOnClick}
+                />
+            </CardContainer>
+        </CardCenterMargin>
     );
 };
 

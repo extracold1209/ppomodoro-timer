@@ -2,7 +2,7 @@ import React from 'react';
 import {action} from '@storybook/addon-actions';
 import TabList from './TabList';
 import CustomNumberInput from './CustomNumberInput';
-import LongPressDesignButton from './LongPressDesignButton';
+import PressButton from './PressButton';
 import Card from './Card';
 import RadioButtons from './RadioButtons';
 
@@ -21,7 +21,7 @@ export const customNumberInput = () => <CustomNumberInput
     onChange={action('ON_CHANGE')}
 />;
 
-export const toggleButton = () => <LongPressDesignButton
+export const toggleButton = () => <PressButton
     value={'Hello'}
     onClick={action('ON_CLICK')}
 />;
