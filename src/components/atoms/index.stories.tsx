@@ -5,6 +5,7 @@ import PressButton from './PressButton';
 import Card from './Card';
 import RadioButtons from './RadioButtons';
 import useModal from '../../hooks/useModal';
+import SettingModalContents from '../atoms/SettingModalContents';
 
 export default {title: 'atoms'};
 
@@ -29,7 +30,9 @@ export const radioButtons = () => <RadioButtons
 />;
 
 export const modal = () => {
-    const [func, Component] = useModal();
+    const [func, Component] = useModal({
+        component: SettingModalContents,
+    });
 
     return (
         <div>
