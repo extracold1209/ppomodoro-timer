@@ -1,18 +1,12 @@
 import React from 'react';
 import {action} from '@storybook/addon-actions';
-import TabList from './TabList';
 import CustomNumberInput from './CustomNumberInput';
 import PressButton from './PressButton';
 import Card from './Card';
 import RadioButtons from './RadioButtons';
+import useModal from '../../hooks/useModal';
 
 export default {title: 'atoms'};
-
-export const tabList = () => <TabList
-    listItems={['바보', '똥개', '해삼', '말미잘']}
-    onClick={((item, activated) => action('TAB_SELECTED')({item, activated}))}
-    disabled={false}
-/>;
 
 export const customNumberInput = () => <CustomNumberInput
     label='테스트'
@@ -21,7 +15,7 @@ export const customNumberInput = () => <CustomNumberInput
     onChange={action('ON_CHANGE')}
 />;
 
-export const toggleButton = () => <PressButton
+export const pressButton = () => <PressButton
     value={'Hello'}
     onClick={action('ON_CLICK')}
 />;
@@ -31,5 +25,16 @@ export const card = () => <Card>Test Card</Card>;
 export const radioButtons = () => <RadioButtons
     selected={'hello'}
     values={['hello', 'world']}
-    onChange={(e) => action('ON_CLICK', )(e)}
+    onChange={(e) => action('ON_CLICK')(e)}
 />;
+
+export const modal = () => {
+    const [func, Component] = useModal();
+
+    return (
+        <div>
+            <button onClick={() => func(true)}>Open Modal</button>
+            <Component />
+        </div>
+    );
+};
