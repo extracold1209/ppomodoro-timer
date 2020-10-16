@@ -8,14 +8,16 @@ const RootContainer: React.FC = styled.div`
     margin: auto;
 `;
 
+const Space = styled.div`
+    margin: '5vh 0'
+`;
+
 const MainContainer: React.FC = () => {
     return (
         <>
             <RootContainer>
                 <Header/>
-                <div style={{
-                    margin: '5vh 0'
-                }}/>
+                <Space/>
                 <NewTimerSection/>
             </RootContainer>
         </>

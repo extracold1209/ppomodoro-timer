@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import styled from '@emotion/styled';
-import { GearIcon } from '@primer/octicons-react';
+import {GearIcon} from '@primer/octicons-react';
+import useModal from '../../hooks/useModal';
+import SettingModal from './SettingModal';
 
 const HeaderContainer = styled.div`
     background-color: #FFCB7D;
@@ -29,14 +31,21 @@ const IconBox = styled.div`
 `;
 
 const Header: React.FC = () => {
+    const [setSettingModalVisible, SettingModalComponent] = useModal({component: SettingModal});
+
+    const handleSettingIconClicked = useCallback(() => {
+        setSettingModalVisible(true);
+    }, []);
+
+
     return (
         <HeaderContainer>
             <HeaderFlexContentContainer>
-                <IconBox>
+                <IconBox onClick={handleSettingIconClicked}>
                     <GearIcon size={28} verticalAlign={'middle'} />
                 </IconBox>
             </HeaderFlexContentContainer>
-
+            <SettingModalComponent />
         </HeaderContainer>
     );
 };
