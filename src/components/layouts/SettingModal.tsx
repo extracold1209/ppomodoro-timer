@@ -17,7 +17,7 @@ const TitleContainer = styled.div`
 `;
 
 
-const SettingModalContents: React.FC = () => {
+const SettingModal: React.FC = () => {
     return (
         <div style={{height: '100%'}}>
             <TitleContainer>
@@ -41,5 +41,5 @@ const SettingModalContents: React.FC = () => {
     );
 };
 
-export default SettingModalContents;
+export default SettingModal;
 

@@ -4,8 +4,6 @@ import CustomNumberInput from './CustomNumberInput';
 import PressButton from './PressButton';
 import Card from './Card';
 import RadioButtons from './RadioButtons';
-import useModal from '../../hooks/useModal';
-import SettingModalContents from '../atoms/SettingModalContents';
 
 export default {title: 'atoms'};
 
@@ -28,16 +26,3 @@ export const radioButtons = () => <RadioButtons
     values={['hello', 'world']}
     onChange={(e) => action('ON_CLICK')(e)}
 />;
-
-export const modal = () => {
-    const [func, Component] = useModal({
-        component: SettingModalContents,
-    });
-
-    return (
-        <div>
-            <button onClick={() => func(true)}>Open Modal</button>
-            <Component />
-        </div>
-    );
-};
