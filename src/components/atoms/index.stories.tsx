@@ -4,6 +4,7 @@ import CustomNumberInput from './CustomNumberInput';
 import PressButton from './PressButton';
 import Card from './Card';
 import RadioButtons from './RadioButtons';
+import Switch from './Switch';
 
 export default {title: 'atoms'};
 
@@ -13,6 +14,8 @@ export const customNumberInput = () => <CustomNumberInput
     value={5}
     onChange={action('ON_CHANGE')}
 />;
+
+export const _switch = () => <Switch onChange={action('ON_CHANGE')}/>;
 
 export const pressButton = () => <PressButton
     value={'Hello'}
