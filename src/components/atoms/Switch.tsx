@@ -1,12 +1,17 @@
 import React, {useCallback} from 'react';
 import styled from '@emotion/styled';
-import {debug} from "webpack";
+
+const SWITCH_WIDTH = 52;
+const SWITCH_HEIGHT = 28;
+const ACTIVE_COLOR = '#2196F3';
+
+const CIRCLE_SIZE = 22;
 
 const SwitchContainer = styled.label`
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: ${SWITCH_WIDTH}px;
+    height: ${SWITCH_HEIGHT}px;
 `;
 
 const TargetInput = styled.input`
@@ -31,27 +36,25 @@ const Slider = styled.span`
         border-radius: 50%;
         position: absolute;
         content: "";
-        height: 26px;
-        width: 26px;
+        height: ${CIRCLE_SIZE}px;
+        width: ${CIRCLE_SIZE}px;
         left: 4px;
-        bottom: 4px;
+        bottom: 3px;
         background-color: white;
         -webkit-transition: .4s;
         transition: .4s;
     }
     
     input:checked + & {
-        background-color: #2196F3;
+        background-color: ${ACTIVE_COLOR};
     }
     
     input:focus + & {
-        box-shadow: 0 0 1px #2196F3;
+        box-shadow: 0 0 1px ${ACTIVE_COLOR};
     }
     
     input:checked + &:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
+        transform: translateX(${CIRCLE_SIZE}px);
     }
 `;
 
