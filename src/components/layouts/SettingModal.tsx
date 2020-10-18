@@ -1,13 +1,8 @@
 import React from 'react';
 import styled from '@emotion/styled';
-
-type IProps = {
-    title?: string;
-    type?: 'confirm' | 'ok' | 'none';
-    onOutsideClick?: () => void;
-    onConfirm?: () => void;
-    onClose?: () => void;
-}
+import Switch from '../atoms/Switch';
+import NumberInput from '../atoms/NumberInput';
+import {BaseModalContainerProps} from '../../hooks/useModal';
 
 const HEADER_HEIGHT = 52;
 const FOOTER_HEIGHT = 52;
@@ -40,10 +35,20 @@ const BottomContainer = styled.div`
     padding: 0 12px;
 `;
 
+const SectionTitle = styled.div`
+    padding-bottom: 5px;
+`;
+
 const SettingSection = styled.div`
     border-bottom: 1px solid rgba(182, 165, 166, 0.2);
     padding-bottom: 12px;
     padding-top: 12px;
+`;
+
+const SpacingColumn = styled.div`
+    margin: 4px 0;
+    display: flex;
+    justify-content: space-between;
 `;
 
 const Button = styled.button`
@@ -53,10 +58,12 @@ const Button = styled.button`
 `;
 
 const InputLabel = styled.label`
+    display: flex;
+    align-items: center;
     margin-right: 8px;
 `;
 
-const SettingModal: React.FC = () => {
+const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
     return (
         <>
             <TitleContainer>
@@ -65,34 +72,32 @@ const SettingModal: React.FC = () => {
             <Container>
                 <ContentContainer>
                     <SettingSection>
-                        <span>시간 설정</span>
-                        <div>
+                        <SectionTitle>시간 설정</SectionTitle>
+                        <SpacingColumn>
                             <InputLabel htmlFor={'setting__work-time'}>
                                 업무시간
                             </InputLabel>
-                            <input type='number' id={'setting__work-time'}/>
-                        </div>
-                        <div>
+                            <NumberInput id={'setting__work-time'}/>
+                        </SpacingColumn>
+                        <SpacingColumn>
                             <InputLabel htmlFor={'setting__rest-time'}>
                                 휴식시간
                             </InputLabel>
-                            <input type='number' id={'setting__rest-time'}/>
-                        </div>
+                            <NumberInput id={'setting__rest-time'}/>
+                        </SpacingColumn>
                     </SettingSection>
                     <SettingSection>
-                        울 짜기 !! <img
-                            src='https://cdn.pixabay.com/photo/2017/09/23/16/33/pixel-heart-2779422_960_720.png'
-                            style={{
-                                width: 150,
-                                height: 150,
-                            }}
-                        />
-                        공부 수고많아쭁 !!
+                        <SpacingColumn>
+                            <InputLabel>
+                                자동넘김
+                            </InputLabel>
+                            <Switch/>
+                        </SpacingColumn>
                     </SettingSection>
                 </ContentContainer>
             </Container>
             <BottomContainer>
-                <Button>섹스</Button>
+                <Button onClick={onConfirm}>섹스</Button>
             </BottomContainer>
         </>
     );

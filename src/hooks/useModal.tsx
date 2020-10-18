@@ -1,16 +1,20 @@
 import React, {useState} from 'react';
 import ReactModal from 'react-modal';
 
+export type BaseModalContainerProps = {
+    onConfirm: () => void;
+}
+
 type VisibleFunction = (visible: boolean) => void;
-type Component = React.FC;
+type TargetComponent = React.FC<BaseModalContainerProps>;
 
 type IProps = {
     defaultOpened?: boolean;
-    component: Component;
+    component: TargetComponent;
 
 }
 
-export default (props: IProps): [VisibleFunction, Component] => {
+export default (props: IProps): [VisibleFunction, React.FC] => {
     const { defaultOpened = false, component: Component } = props;
     const [isOpen, setOpenState] = useState(defaultOpened);
 
@@ -34,7 +38,9 @@ export default (props: IProps): [VisibleFunction, Component] => {
                 },
             }}
         >
-            <Component />
+            <Component
+                onConfirm={() => setOpenState(false)}
+            />
         </ReactModal>
     ];
 };
