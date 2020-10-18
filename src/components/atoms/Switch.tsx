@@ -59,17 +59,22 @@ const Slider = styled.span`
 `;
 
 type IProps = {
+    value?: boolean;
     onChange?: (value: boolean) => void;
 }
 
-const Switch: React.FC<IProps> = ({onChange}) => {
+const Switch: React.FC<IProps> = ({value, onChange}) => {
     const handleCheckboxChanged = useCallback((e) => {
         onChange?.(e.target.checked);
     }, [onChange]);
 
     return (
         <SwitchContainer>
-            <TargetInput type='checkbox' onChange={handleCheckboxChanged}/>
+            <TargetInput
+                type='checkbox'
+                checked={value}
+                onChange={handleCheckboxChanged}
+            />
             <Slider />
         </SwitchContainer>
     );

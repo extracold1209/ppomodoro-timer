@@ -12,10 +12,20 @@ audioController.load('tadya.mp3');
 
 const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatch, RootState>) => (next) => async (action: PayloadAction) => {
     let lockNextAction = false;
-    const timerState = getState().timer;
+    const rootState = getState();
+    const {timer: timerState, common: commonState} = rootState;
+
+    const isLastTick = function () {
+        return timerState.timers[timerState.selectedTimer].currentTime <= 1;
+    };
+
 
     if (action.type === startTimer.type) {
         audioController.pause();
+        if (isLastTick()) {
+            dispatch(nextTimer());
+        }
+
         tickInterval = setInterval(() => {
             dispatch(tick());
         }, 1000);
@@ -26,12 +36,15 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         tickInterval && clearTimeout(tickInterval);
     }
 
-    if (action.type === tick.type && timerState.timers[timerState.selectedTimer].currentTime === 1) {
+    if (action.type === tick.type && isLastTick()) {
         lockNextAction = true;
         next(action);
         await audioController.play('tadya.mp3');
-        dispatch(stopTimer());
+
         dispatch(nextTimer());
+        if (!commonState.autoNext) {
+            dispatch(stopTimer());
+        }
     }
 
     !lockNextAction && next(action);

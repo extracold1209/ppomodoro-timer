@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import styled from '@emotion/styled';
 import Switch from '../atoms/Switch';
 import NumberInput from '../atoms/NumberInput';
@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../stores';
 import {changeTimerInitialTime, Timer, TimerMap} from '../../stores/timer';
 import {createSelector} from '@reduxjs/toolkit';
+import {changeAutoNext} from "../../stores/common";
 
 const HEADER_HEIGHT = 52;
 const FOOTER_HEIGHT = 52;
@@ -70,6 +71,7 @@ const InputLabel = styled.label`
 const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
     const timers = useSelector<RootState, TimerMap>(state => state.timer.timers);
     const timerIds = useSelector<RootState, string[]>(state => state.timer.timerIds);
+    const autoNext = useSelector<RootState, boolean>(state => state.common.autoNext);
     const dispatch = useDispatch();
 
     const [workTimer, restTimer] = useMemo(() => timerIds.map((id) => timers[id]), [timers, timerIds]);
@@ -77,6 +79,9 @@ const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
     const workTimerMinute = useMemo(() => workTimer.initialTime / 60, [workTimer]);
     const restTimerMinute = useMemo(() => restTimer.initialTime / 60, [restTimer]);
 
+    const handleAutoNextChanged = useCallback((nextValue: boolean) => {
+        dispatch(changeAutoNext(nextValue));
+    }, []);
 
     return (
         <>
@@ -86,7 +91,7 @@ const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
             <Container>
                 <ContentContainer>
                     <SettingSection>
-                        <SectionTitle>시간 설정</SectionTitle>
+                        <SectionTitle>시간설정</SectionTitle>
                         <SpacingColumn>
                             <InputLabel htmlFor={'setting__work-time'}>
                                 {workTimer.timerName}
@@ -123,13 +128,16 @@ const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
                             <InputLabel>
                                 자동넘김
                             </InputLabel>
-                            <Switch/>
+                            <Switch
+                                value={autoNext}
+                                onChange={handleAutoNextChanged}
+                            />
                         </SpacingColumn>
                     </SettingSection>
                 </ContentContainer>
             </Container>
             <BottomContainer>
-                <Button onClick={onConfirm}>섹스</Button>
+                <Button onClick={onConfirm}>확인</Button>
             </BottomContainer>
         </>
     );

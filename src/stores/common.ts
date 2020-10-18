@@ -1,21 +1,17 @@
-import {createAction, createReducer} from '@reduxjs/toolkit';
+import {createAction, createReducer, PayloadAction} from '@reduxjs/toolkit';
 
 export interface CommonReducer {
-    count: number;
+    autoNext: boolean;
 }
 
-const sayHelloAction = createAction('common/SAY_HELLO');
-const sayByeAction = createAction('common/SAY_BYE');
+export const changeAutoNext = createAction<boolean>('COMMON/AUTO_NEXT');
 
 const defaultState: CommonReducer = {
-    count: 1,
+    autoNext: true,
 };
 
 export default createReducer(defaultState, {
-    [sayHelloAction.type]: (state) => {
-        state.count += 1;
-    },
-    [sayByeAction.type]: (state) => {
-        state.count -= 1;
+    [changeAutoNext.type]: (state, {payload}: PayloadAction<boolean>) => {
+        state.autoNext = payload;
     },
 });

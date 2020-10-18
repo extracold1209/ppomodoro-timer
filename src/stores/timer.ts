@@ -21,12 +21,12 @@ export interface TimerReducer {
     selectedTimer: string;
 }
 
-export const startTimer = createAction('TIMER_/START');
-export const stopTimer = createAction('TIMER_/STOP');
-export const nextTimer = createAction('TIMER_/NEXT');
-export const selectTimer = createAction<string>('TIMER_/SELECT');
-export const changeTimerInitialTime = createAction<{ id: string, value: number }>('TIMER_/CHANGE_INITIAL_TIME');
-export const tick = createAction('TIMER_/TICK');
+export const startTimer = createAction('TIMER/START');
+export const stopTimer = createAction('TIMER/STOP');
+export const nextTimer = createAction('TIMER/NEXT');
+export const selectTimer = createAction<string>('TIMER/SELECT');
+export const changeTimerInitialTime = createAction<{ id: string, value: number }>('TIMER/CHANGE_INITIAL_TIME');
+export const tick = createAction('TIMER/TICK');
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
