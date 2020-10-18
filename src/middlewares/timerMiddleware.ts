@@ -1,7 +1,7 @@
 import {Dispatch, Middleware, MiddlewareAPI} from 'redux';
 import {RootState} from '../stores';
 import {PayloadAction} from '@reduxjs/toolkit';
-import {nextTimer, startTimer, stopTimer, tick} from '../stores/newTimer';
+import {changeTimerInitialTime, nextTimer, startTimer, stopTimer, tick} from '../stores/timer';
 import AudioController from '../utils/AudioController';
 
 let tickInterval: number;
@@ -12,7 +12,7 @@ audioController.load('tadya.mp3');
 
 const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatch, RootState>) => (next) => async (action: PayloadAction) => {
     let lockNextAction = false;
-    const timerState = getState().newTimer;
+    const timerState = getState().timer;
 
     if (action.type === startTimer.type) {
         audioController.pause();

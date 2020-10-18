@@ -6,9 +6,9 @@ import {DefaultTheme} from '../../constants/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
-import {stopTimer, startTimer, NewTimerReducer, selectTimer, TimerMap} from '../../stores/newTimer';
+import {stopTimer, startTimer, selectTimer, TimerMap} from '../../stores/timer';
 import RadioButtons from '../atoms/RadioButtons';
-import {TimerStatus} from '../../stores/newTimer';
+import {TimerStatus} from '../../stores/timer';
 
 const CardContainer = styled(Card)`
     text-align: center;
@@ -33,7 +33,7 @@ const TimerContainer = styled.div<{ theme: DefaultTheme }>`
 `;
 
 const currentTimerSelector = createSelector<RootState, number, { minute: string, second: string }>(
-    (state) => state.newTimer.timers[state.newTimer.selectedTimer].currentTime,
+    (state) => state.timer.timers[state.timer.selectedTimer].currentTime,
     (initialTime) => {
         const minute = Math.floor(initialTime / 60);
         const second = initialTime % 60;
@@ -50,13 +50,13 @@ const buttonStates = {
     STOP: '정지',
 };
 
-const NewTimerSection: React.FC = () => {
+const TimerSection: React.FC = () => {
     const {minute, second} = useSelector(currentTimerSelector);
-    const timerIdsList = useSelector<RootState, string[]>((state) => state.newTimer.timerIds);
-    const timers = useSelector<RootState, TimerMap>((state) => state.newTimer.timers);
-    const selectedTimer = useSelector<RootState, string>((state) => state.newTimer.selectedTimer);
+    const timerIdsList = useSelector<RootState, string[]>((state) => state.timer.timerIds);
+    const timers = useSelector<RootState, TimerMap>((state) => state.timer.timers);
+    const selectedTimer = useSelector<RootState, string>((state) => state.timer.selectedTimer);
 
-    const timerStatus = useSelector<RootState>((state) => state.newTimer.status);
+    const timerStatus = useSelector<RootState>((state) => state.timer.status);
     const dispatch = useDispatch();
 
     const [selectedTimerName, timerNameList] = useMemo(
@@ -113,4 +113,4 @@ const NewTimerSection: React.FC = () => {
     );
 };
 
-export default NewTimerSection;
+export default TimerSection;

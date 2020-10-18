@@ -5,7 +5,7 @@ import NumberInput from '../atoms/NumberInput';
 import {BaseModalContainerProps} from '../../hooks/useModal';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../stores';
-import {changeTimerInitialTime, Timer, TimerMap} from '../../stores/newTimer';
+import {changeTimerInitialTime, Timer, TimerMap} from '../../stores/timer';
 import {createSelector} from '@reduxjs/toolkit';
 
 const HEADER_HEIGHT = 52;
@@ -68,8 +68,8 @@ const InputLabel = styled.label`
 `;
 
 const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
-    const timers = useSelector<RootState, TimerMap>(state => state.newTimer.timers);
-    const timerIds = useSelector<RootState, string[]>(state => state.newTimer.timerIds);
+    const timers = useSelector<RootState, TimerMap>(state => state.timer.timers);
+    const timerIds = useSelector<RootState, string[]>(state => state.timer.timerIds);
     const dispatch = useDispatch();
 
     const [workTimer, restTimer] = useMemo(() => timerIds.map((id) => timers[id]), [timers, timerIds]);

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import NewTimerSection from '../layouts/NewTimerSection';
+import TimerSection from '../layouts/TimerSection';
 import Header from '../layouts/Header';
 
 const RootContainer: React.FC = styled.div`
@@ -18,7 +18,7 @@ const MainContainer: React.FC = () => {
             <RootContainer>
                 <Header/>
                 <Space/>
-                <NewTimerSection/>
+                <TimerSection/>
             </RootContainer>
         </>
 
