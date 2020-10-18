@@ -21,6 +21,7 @@ export const startTimer = createAction('NEW_TIMER/START');
 export const stopTimer = createAction('NEW_TIMER/STOP');
 export const nextTimer = createAction('NEW_TIMER/NEXT');
 export const selectTimer = createAction<string>('NEW_TIMER/SELECT');
+export const changeTimerInitialTime = createAction<{ timerName: string, value: number }>('NEW_TIMER/CHANGE_INITIAL_TIME');
 export const tick = createAction('NEW_TIMER/TICK');
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
@@ -77,4 +78,11 @@ export default createReducer(defaultState, {
     [stopTimer.type]: (state) => {
         state.status = TimerStatus.STOPPED;
     },
+    [changeTimerInitialTime.type]: (state, {payload}: PayloadAction<{ timerName: string, value: number }>) => {
+        const {timerName, value} = payload;
+        const selectedTimer = state.timers.find((timer) => timer.timerName === timerName);
+        if (selectedTimer) {
+            selectedTimer.initialTime = value;
+        }
+    }
 });

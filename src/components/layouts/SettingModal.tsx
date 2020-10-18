@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import styled from '@emotion/styled';
 import Switch from '../atoms/Switch';
 import NumberInput from '../atoms/NumberInput';
 import {BaseModalContainerProps} from '../../hooks/useModal';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../stores';
+import {changeTimerInitialTime, Timer} from '../../stores/newTimer';
+import {createSelector} from '@reduxjs/toolkit';
 
 const HEADER_HEIGHT = 52;
 const FOOTER_HEIGHT = 52;
@@ -64,6 +68,14 @@ const InputLabel = styled.label`
 `;
 
 const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
+    const timers = useSelector<RootState, Timer[]>(state => state.newTimer.timers);
+    const dispatch = useDispatch();
+    const [workTimer, restTimer] = timers;
+
+    const workTimerMinute = useMemo(() => workTimer.initialTime / 60, [workTimer]);
+    const restTimerMinute = useMemo(() => restTimer.initialTime / 60, [restTimer]);
+
+
     return (
         <>
             <TitleContainer>
@@ -75,15 +87,33 @@ const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
                         <SectionTitle>시간 설정</SectionTitle>
                         <SpacingColumn>
                             <InputLabel htmlFor={'setting__work-time'}>
-                                업무시간
+                                {workTimer.timerName}
                             </InputLabel>
-                            <NumberInput id={'setting__work-time'}/>
+                            <NumberInput
+                                id={'setting__work-time'}
+                                value={workTimerMinute}
+                                onChange={(value) => {
+                                    dispatch(changeTimerInitialTime({
+                                        timerName: workTimer.timerName,
+                                        value: value * 60,
+                                    }));
+                                }}
+                            />
                         </SpacingColumn>
                         <SpacingColumn>
                             <InputLabel htmlFor={'setting__rest-time'}>
-                                휴식시간
+                                {restTimer.timerName}
                             </InputLabel>
-                            <NumberInput id={'setting__rest-time'}/>
+                            <NumberInput
+                                id={'setting__rest-time'}
+                                value={restTimerMinute}
+                                onChange={(value) => {
+                                    dispatch(changeTimerInitialTime({
+                                        timerName: restTimer.timerName,
+                                        value: value * 60,
+                                    }));
+                                }}
+                            />
                         </SpacingColumn>
                     </SettingSection>
                     <SettingSection>
