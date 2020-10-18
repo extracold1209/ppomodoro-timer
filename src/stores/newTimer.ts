@@ -10,7 +10,7 @@ export type Timer = {
 
 export type TimerMap = { [timerName: string]: Timer };
 
-enum TimerStatus {
+export enum TimerStatus {
     STOPPED, PENDING, STARTED
 }
 

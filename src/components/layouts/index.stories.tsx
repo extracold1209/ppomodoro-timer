@@ -1,5 +1,4 @@
 import React from 'react';
-import TimerControlSection from './TimerControlSection';
 import NewTimerSection from './NewTimerSection';
 import Header from './Header';
 import useModal from '../../hooks/useModal';
@@ -9,7 +8,6 @@ export default {
     title: 'Layouts'
 };
 
-export const timerControlSection = () => <TimerControlSection/>;
 export const newTimerSection = () => <NewTimerSection/>;
 export const header = () => <Header/>;
 export const modal = () => {

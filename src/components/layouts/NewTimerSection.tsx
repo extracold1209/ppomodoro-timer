@@ -6,9 +6,9 @@ import {DefaultTheme} from '../../constants/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
-import {Timer, stopTimer, startTimer, NewTimerReducer, selectTimer, TimerMap} from '../../stores/newTimer';
+import {stopTimer, startTimer, NewTimerReducer, selectTimer, TimerMap} from '../../stores/newTimer';
 import RadioButtons from '../atoms/RadioButtons';
-import {TimerStatus} from '../../stores/timer';
+import {TimerStatus} from '../../stores/newTimer';
 
 const CardContainer = styled(Card)`
     text-align: center;
