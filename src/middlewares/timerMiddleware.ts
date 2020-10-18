@@ -21,8 +21,9 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         }, 1000);
     }
 
-    if (action.type === stopTimer.type) {
-        clearTimeout(tickInterval);
+    if (action.type === stopTimer.type ||
+        action.type === changeTimerInitialTime.type) {
+        tickInterval && clearTimeout(tickInterval);
     }
 
     if (action.type === tick.type && timerState.timers[timerState.selectedTimer].currentTime === 1) {
