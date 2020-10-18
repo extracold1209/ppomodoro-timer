@@ -5,7 +5,7 @@ import NumberInput from '../atoms/NumberInput';
 import {BaseModalContainerProps} from '../../hooks/useModal';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../stores';
-import {changeTimerInitialTime, Timer} from '../../stores/newTimer';
+import {changeTimerInitialTime, Timer, TimerMap} from '../../stores/newTimer';
 import {createSelector} from '@reduxjs/toolkit';
 
 const HEADER_HEIGHT = 52;
@@ -68,9 +68,11 @@ const InputLabel = styled.label`
 `;
 
 const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
-    const timers = useSelector<RootState, Timer[]>(state => state.newTimer.timers);
+    const timers = useSelector<RootState, TimerMap>(state => state.newTimer.timers);
+    const timerIds = useSelector<RootState, string[]>(state => state.newTimer.timerIds);
     const dispatch = useDispatch();
-    const [workTimer, restTimer] = timers;
+
+    const [workTimer, restTimer] = useMemo(() => timerIds.map((id) => timers[id]), [timers, timerIds]);
 
     const workTimerMinute = useMemo(() => workTimer.initialTime / 60, [workTimer]);
     const restTimerMinute = useMemo(() => restTimer.initialTime / 60, [restTimer]);
@@ -94,7 +96,7 @@ const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
                                 value={workTimerMinute}
                                 onChange={(value) => {
                                     dispatch(changeTimerInitialTime({
-                                        timerName: workTimer.timerName,
+                                        id: workTimer.id,
                                         value: value * 60,
                                     }));
                                 }}
@@ -109,7 +111,7 @@ const SettingModal: React.FC<BaseModalContainerProps> = ({onConfirm}) => {
                                 value={restTimerMinute}
                                 onChange={(value) => {
                                     dispatch(changeTimerInitialTime({
-                                        timerName: restTimer.timerName,
+                                        id: restTimer.id,
                                         value: value * 60,
                                     }));
                                 }}

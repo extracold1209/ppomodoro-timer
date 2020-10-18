@@ -6,6 +6,7 @@ type IProps = {
     values: string[];
     selected: string;
     onChange?: (value: string) => void;
+    selector?: (selected: string) => string; // 표기될 명칭과 내부 명칭이 다른 경우 사용가능
 }
 
 const Button = styled.button<{ selected: boolean }>`

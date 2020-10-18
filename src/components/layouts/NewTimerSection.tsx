@@ -6,7 +6,7 @@ import {DefaultTheme} from '../../constants/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../stores';
-import {Timer, stopTimer, startTimer, NewTimerReducer, selectTimer} from '../../stores/newTimer';
+import {Timer, stopTimer, startTimer, NewTimerReducer, selectTimer, TimerMap} from '../../stores/newTimer';
 import RadioButtons from '../atoms/RadioButtons';
 import {TimerStatus} from '../../stores/timer';
 
@@ -32,25 +32,17 @@ const TimerContainer = styled.div<{ theme: DefaultTheme }>`
     color: white;
 `;
 
-const timerTextReSelector = createSelector<RootState, Timer, { minute: string, second: string }>(
-    (state) => state.newTimer.selectedTimer,
-    (timer) => {
-        const minute = Math.floor(timer.currentTime / 60);
-        const second = timer.currentTime % 60;
+const currentTimerSelector = createSelector<RootState, number, { minute: string, second: string }>(
+    (state) => state.newTimer.timers[state.newTimer.selectedTimer].currentTime,
+    (initialTime) => {
+        const minute = Math.floor(initialTime / 60);
+        const second = initialTime % 60;
 
         return {
             minute: (minute < 10) ? '0' + minute : minute + '',
             second: (second < 10) ? '0' + second : second + '',
         };
-    },
-);
-
-const timerReSelector = createSelector<RootState, NewTimerReducer, [string[], string]>(
-    (state) => state.newTimer,
-    (reducer) => ([
-        reducer.timers.map((timer) => timer.timerName),
-        reducer.selectedTimer.timerName,
-    ]),
+    }
 );
 
 const buttonStates = {
@@ -59,10 +51,23 @@ const buttonStates = {
 };
 
 const NewTimerSection: React.FC = () => {
-    const {minute, second} = useSelector(timerTextReSelector);
-    const [timers, selected] = useSelector(timerReSelector);
+    const {minute, second} = useSelector(currentTimerSelector);
+    const timerIdsList = useSelector<RootState, string[]>((state) => state.newTimer.timerIds);
+    const timers = useSelector<RootState, TimerMap>((state) => state.newTimer.timers);
+    const selectedTimer = useSelector<RootState, string>((state) => state.newTimer.selectedTimer);
+
     const timerStatus = useSelector<RootState>((state) => state.newTimer.status);
     const dispatch = useDispatch();
+
+    const [selectedTimerName, timerNameList] = useMemo(
+        () => {
+            return [
+                timers[selectedTimer].timerName,
+                timerIdsList.map((id) => timers[id].timerName)
+            ];
+        },
+        [selectedTimer, timerIdsList, timers]
+    );
 
     const buttonValue = useMemo(() => {
         if (timerStatus === TimerStatus.STOPPED) {
@@ -80,17 +85,20 @@ const NewTimerSection: React.FC = () => {
         }
     }, [buttonValue]);
 
-    const handleOnChangeTimer = useCallback((e: string) => {
-        dispatch(stopTimer());
-        dispatch(selectTimer(e));
-    }, [timers]);
+    const handleOnChangeTimer = useCallback((selectedTimerName: string) => {
+        const selectedTimer = Object.values(timers).find((timer) => timer.timerName === selectedTimerName);
+        if (selectedTimer) {
+            dispatch(stopTimer());
+            dispatch(selectTimer(selectedTimer.id));
+        }
+    }, [timerNameList]);
 
     return (
         <CardCenterMargin>
             <CardContainer>
                 <RadioButtons
-                    selected={selected}
-                    values={timers}
+                    selected={selectedTimerName}
+                    values={timerNameList}
                     onChange={handleOnChangeTimer}
                 />
                 <TimerContainer>

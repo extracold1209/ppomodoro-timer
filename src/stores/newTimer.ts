@@ -1,11 +1,14 @@
 import {createAction, createReducer, PayloadAction} from '@reduxjs/toolkit';
 
 export type Timer = {
+    id: string;
     timerName: string;
     endSound: string;
     initialTime: number;
     currentTime: number;
 }
+
+export type TimerMap = { [timerName: string]: Timer };
 
 enum TimerStatus {
     STOPPED, PENDING, STARTED
@@ -13,21 +16,23 @@ enum TimerStatus {
 
 export interface NewTimerReducer {
     status: TimerStatus;
-    timers: Timer[];
-    selectedTimer: Timer;
+    timers: TimerMap;
+    timerIds: string[];
+    selectedTimer: string;
 }
 
 export const startTimer = createAction('NEW_TIMER/START');
 export const stopTimer = createAction('NEW_TIMER/STOP');
 export const nextTimer = createAction('NEW_TIMER/NEXT');
 export const selectTimer = createAction<string>('NEW_TIMER/SELECT');
-export const changeTimerInitialTime = createAction<{ timerName: string, value: number }>('NEW_TIMER/CHANGE_INITIAL_TIME');
+export const changeTimerInitialTime = createAction<{ id: string, value: number }>('NEW_TIMER/CHANGE_INITIAL_TIME');
 export const tick = createAction('NEW_TIMER/TICK');
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
-function createTimer({timerName, initialTime, endSound}: PartialBy<Omit<Timer, 'currentTime'>, 'endSound'>): Timer {
+function createTimer({id, timerName, initialTime, endSound}: PartialBy<Omit<Timer, 'currentTime'>, 'endSound'>): Timer {
     return {
+        id,
         timerName,
         initialTime,
         currentTime: initialTime,
@@ -35,41 +40,50 @@ function createTimer({timerName, initialTime, endSound}: PartialBy<Omit<Timer, '
     };
 }
 
-const defaultTimers: Timer[] = [
-    createTimer({timerName: '집중시간', initialTime: 1500}),
-    createTimer({timerName: '휴식시간', initialTime: 300}),
-];
+const timers: TimerMap = {
+    'work': createTimer({id: 'work', timerName: '집중시간', initialTime: 1500}),
+    'rest': createTimer({id: 'rest', timerName: '휴식시간', initialTime: 300}),
+};
 
 const defaultState: NewTimerReducer = {
     status: TimerStatus.STOPPED,
-    timers: defaultTimers,
-    selectedTimer: defaultTimers[0],
+    timers,
+    timerIds: Object.keys(timers),
+    selectedTimer: 'work',
 };
+
 
 export default createReducer(defaultState, {
     [selectTimer.type]: (state, {payload}: PayloadAction<string>) => {
-        state.selectedTimer.currentTime = state.selectedTimer.initialTime;
-        const nextTimer = state.timers.find((timer) => timer.timerName === payload);
+        // reset current timer's time
+        const selectedTimer = state.timers[state.selectedTimer];
+        selectedTimer.currentTime = selectedTimer.initialTime;
+
+
+        const nextTimer = state.timers[payload];
         if (nextTimer) {
-            state.selectedTimer = nextTimer;
-            state.selectedTimer.currentTime = state.selectedTimer.initialTime;
+            nextTimer.currentTime = nextTimer.initialTime;
+            state.selectedTimer = payload;
         } else {
             console.error('try to select timer is failed!');
         }
     },
     [nextTimer.type]: (state) => {
-        state.selectedTimer.currentTime = state.selectedTimer.initialTime;
-        const currentIndex = state.timers.findIndex(timer => timer.timerName === state.selectedTimer.timerName);
-        if (currentIndex >= state.timers.length - 1) {
-            state.selectedTimer = state.timers[0];
+        const selectedTimer = state.timers[state.selectedTimer];
+
+        selectedTimer.currentTime = selectedTimer.initialTime;
+        const currentIndex = state.timerIds.findIndex((id) => id === selectedTimer.id);
+        if (currentIndex >= state.timerIds.length - 1) {
+            state.selectedTimer = state.timerIds[0];
         } else {
-            state.selectedTimer = state.timers[currentIndex + 1];
+            state.selectedTimer = state.timerIds[currentIndex + 1];
         }
-        state.selectedTimer.currentTime = state.selectedTimer.initialTime;
+        selectedTimer.currentTime = selectedTimer.initialTime;
     },
     [tick.type]: (state) => {
-        if (state.selectedTimer.currentTime > 0) {
-            state.selectedTimer.currentTime--;
+        const selectedTimer = state.timers[state.selectedTimer];
+        if (selectedTimer.currentTime > 0) {
+            selectedTimer.currentTime--;
         }
     },
     [startTimer.type]: (state) => {
@@ -78,11 +92,16 @@ export default createReducer(defaultState, {
     [stopTimer.type]: (state) => {
         state.status = TimerStatus.STOPPED;
     },
-    [changeTimerInitialTime.type]: (state, {payload}: PayloadAction<{ timerName: string, value: number }>) => {
-        const {timerName, value} = payload;
-        const selectedTimer = state.timers.find((timer) => timer.timerName === timerName);
+    [changeTimerInitialTime.type]: (state, {payload}: PayloadAction<{ id: string, value: number }>) => {
+        const {id, value} = payload;
+        const selectedTimer = state.timers[id];
         if (selectedTimer) {
+            if (state.status !== TimerStatus.STOPPED) {
+                state.status = TimerStatus.STOPPED;
+            }
+
             selectedTimer.initialTime = value;
+            selectedTimer.currentTime = value;
         }
     }
 });

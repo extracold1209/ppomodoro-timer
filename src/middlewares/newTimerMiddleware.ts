@@ -25,7 +25,7 @@ const TimerMiddleware: Middleware = ({dispatch, getState}: MiddlewareAPI<Dispatc
         clearTimeout(tickInterval);
     }
 
-    if (action.type === tick.type && timerState.selectedTimer.currentTime === 1) {
+    if (action.type === tick.type && timerState.timers[timerState.selectedTimer].currentTime === 1) {
         lockNextAction = true;
         next(action);
         await audioController.play('tadya.mp3');
